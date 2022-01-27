@@ -1,6 +1,6 @@
-package org.jetbrains.plugins.template.services
+package com.github.chiroruxx.fishplugin.services
 
-import org.jetbrains.plugins.template.MyBundle
+import com.github.chiroruxx.fishplugin.MyBundle
 
 class MyApplicationService {
 
