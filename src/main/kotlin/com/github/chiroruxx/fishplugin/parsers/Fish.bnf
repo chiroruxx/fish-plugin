@@ -1,0 +1,21 @@
+{
+  parserClass="com.github.chiroruxx.fishplugin.parsers.FishParser"
+
+  extends="com.intellij.extapi.psi.ASTWrapperPsiElement"
+
+  psiClassPrefix="Fish"
+  psiImplClassSuffix="Impl"
+  psiPackage="com.github.chiroruxx.fishplugin.parsers"
+  psiImplPackage="com.github.chiroruxx.fishplugin.parsers.impl"
+
+  elementTypeHolderClass="com.github.chiroruxx.fishplugin.parsers.FishTypes"
+  elementTypeClass="com.github.chiroruxx.fishplugin.parsers.FishElementType"
+  tokenTypeClass="com.github.chiroruxx.fishplugin.parsers.FishTokenType"
+}
+
+fishFile ::= item_*
+
+private item_ ::= (sentence|CRLF)
+
+sentence ::= COMMAND [SEPARATOR args]
+args ::= ARG [SEPARATOR args]

@@ -9,11 +9,13 @@
     <extensions defaultExtensionNs="com.intellij">
         <applicationService serviceImplementation="com.github.chiroruxx.fishplugin.services.MyApplicationService"/>
         <projectService serviceImplementation="com.github.chiroruxx.fishplugin.services.MyProjectService"/>
-        <fileType name="Fish File"
+        <fileType name="Fish shell file"
                   implementationClass="com.github.chiroruxx.fishplugin.languages.FishFileType"
                   fieldName="INSTANCE"
                   language="Fish"
                   extensions="fish"/>
+        <lang.parserDefinition language="Fish"
+                               implementationClass="com.github.chiroruxx.fishplugin.parsers.FishParserDefinition"/>
     </extensions>
 
     <applicationListeners>
