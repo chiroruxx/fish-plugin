@@ -1,5 +1,5 @@
 // This is a generated file. Not intended for manual editing.
-package com.github.chiroruxx.fishplugin.parsers.impl;
+package com.github.chiroruxx.fishplugin.languages.impl;
 
 import java.util.List;
 import org.jetbrains.annotations.*;
@@ -7,9 +7,9 @@ import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.util.PsiTreeUtil;
-import static com.github.chiroruxx.fishplugin.parsers.FishTypes.*;
+import static com.github.chiroruxx.fishplugin.languages.FishTypes.*;
 import com.intellij.extapi.psi.ASTWrapperPsiElement;
-import com.github.chiroruxx.fishplugin.parsers.*;
+import com.github.chiroruxx.fishplugin.languages.*;
 
 public class FishSentenceImpl extends ASTWrapperPsiElement implements FishSentence {
 

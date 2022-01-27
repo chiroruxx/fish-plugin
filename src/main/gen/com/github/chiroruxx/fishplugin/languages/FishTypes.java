@@ -1,10 +1,10 @@
 // This is a generated file. Not intended for manual editing.
-package com.github.chiroruxx.fishplugin.parsers;
+package com.github.chiroruxx.fishplugin.languages;
 
 import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.PsiElement;
 import com.intellij.lang.ASTNode;
-import com.github.chiroruxx.fishplugin.parsers.impl.*;
+import com.github.chiroruxx.fishplugin.languages.impl.*;
 
 public interface FishTypes {
 

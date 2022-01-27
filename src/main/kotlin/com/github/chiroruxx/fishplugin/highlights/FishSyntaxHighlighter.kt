@@ -1,7 +1,7 @@
 package com.github.chiroruxx.fishplugin.highlights
 
-import com.github.chiroruxx.fishplugin.lexers.FishLexerAdapter
-import com.github.chiroruxx.fishplugin.parsers.FishTypes
+import com.github.chiroruxx.fishplugin.languages.FishLexerAdapter
+import com.github.chiroruxx.fishplugin.languages.FishTypes
 import com.intellij.lexer.Lexer
 import com.intellij.openapi.editor.DefaultLanguageHighlighterColors
 import com.intellij.openapi.editor.HighlighterColors
@@ -10,16 +10,10 @@ import com.intellij.openapi.editor.colors.TextAttributesKey.createTextAttributes
 import com.intellij.openapi.fileTypes.SyntaxHighlighterBase
 import com.intellij.psi.TokenType
 import com.intellij.psi.tree.IElementType
-import org.jetbrains.annotations.NotNull
-
 
 class FishSyntaxHighlighter : SyntaxHighlighterBase() {
-    @NotNull
-    override fun getHighlightingLexer(): Lexer {
-        return FishLexerAdapter()
-    }
+    override fun getHighlightingLexer(): Lexer = FishLexerAdapter()
 
-    @NotNull
     override fun getTokenHighlights(tokenType: IElementType): Array<TextAttributesKey> {
         return when (tokenType) {
             FishTypes.COMMAND -> COMMAND_KEYS
