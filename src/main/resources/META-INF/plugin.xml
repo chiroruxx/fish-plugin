@@ -16,7 +16,8 @@
                   extensions="fish"/>
         <lang.parserDefinition language="Fish"
                                implementationClass="com.github.chiroruxx.fishplugin.parsers.FishParserDefinition"/>
-    </extensions>
+        <lang.syntaxHighlighterFactory language="Fish"
+                                       implementationClass="com.github.chiroruxx.fishplugin.highlights.FishSyntaxHighlighterFactory"/>    </extensions>
 
     <applicationListeners>
         <listener class="com.github.chiroruxx.fishplugin.listeners.MyProjectManagerListener"
