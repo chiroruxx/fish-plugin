@@ -24,7 +24,7 @@ class FishLexer implements FlexLexer {
 
   /** lexical states */
   public static final int YYINITIAL = 0;
-  public static final int WAITING_ARG = 2;
+  public static final int WAITING_ARGS = 2;
 
   /**
    * ZZ_LEXSTATE[l] is the state in the DFA for the lexical state l
@@ -55,7 +55,8 @@ class FishLexer implements FlexLexer {
 
   /* The ZZ_CMAP_A table has 320 entries */
   static final char ZZ_CMAP_A[] = zzUnpackCMap(
-    "\11\0\1\4\1\2\1\1\1\5\1\3\22\0\1\7\73\0\1\6\50\0\1\1\242\0\2\1\26\0");
+    "\11\0\1\4\1\2\1\1\1\5\1\3\22\0\1\7\1\0\1\11\4\0\1\6\64\0\1\10\50\0\1\1\242"+
+    "\0\2\1\26\0");
 
   /** 
    * Translates DFA states to action switch labels.
@@ -63,11 +64,12 @@ class FishLexer implements FlexLexer {
   private static final int [] ZZ_ACTION = zzUnpackAction();
 
   private static final String ZZ_ACTION_PACKED_0 =
-    "\2\0\2\1\1\2\1\1\1\3\1\4\1\3\1\5"+
-    "\1\2\1\3\1\2\1\4\1\0\1\1\1\0\2\5";
+    "\2\0\2\1\1\2\1\1\1\3\1\4\1\3\1\4"+
+    "\2\5\1\3\2\4\1\5\1\0\1\1\2\0\1\6"+
+    "\1\0\1\5\2\0\1\6\2\0\1\6\1\5\1\0";
 
   private static int [] zzUnpackAction() {
-    int [] result = new int[19];
+    int [] result = new int[31];
     int offset = 0;
     offset = zzUnpackAction(ZZ_ACTION_PACKED_0, offset, result);
     return result;
@@ -92,12 +94,13 @@ class FishLexer implements FlexLexer {
   private static final int [] ZZ_ROWMAP = zzUnpackRowMap();
 
   private static final String ZZ_ROWMAP_PACKED_0 =
-    "\0\0\0\10\0\20\0\30\0\40\0\50\0\60\0\70"+
-    "\0\100\0\110\0\120\0\130\0\60\0\140\0\70\0\150"+
-    "\0\140\0\120\0\160";
+    "\0\0\0\12\0\24\0\36\0\50\0\62\0\74\0\106"+
+    "\0\120\0\132\0\144\0\156\0\170\0\202\0\214\0\226"+
+    "\0\132\0\240\0\214\0\202\0\106\0\252\0\264\0\276"+
+    "\0\310\0\226\0\322\0\334\0\276\0\346\0\360";
 
   private static int [] zzUnpackRowMap() {
-    int [] result = new int[19];
+    int [] result = new int[31];
     int offset = 0;
     offset = zzUnpackRowMap(ZZ_ROWMAP_PACKED_0, offset, result);
     return result;
@@ -121,19 +124,26 @@ class FishLexer implements FlexLexer {
 
   private static final String ZZ_TRANS_PACKED_0 =
     "\1\3\1\4\1\5\1\4\1\6\1\7\1\10\1\11"+
-    "\1\12\1\13\1\5\1\13\1\14\1\15\1\16\1\11"+
-    "\2\3\1\0\2\3\1\0\1\17\1\0\1\3\1\4"+
-    "\1\5\1\4\1\3\1\5\1\17\2\0\3\5\1\0"+
-    "\1\5\2\0\2\3\1\0\1\3\1\6\1\11\1\17"+
-    "\1\11\1\0\3\5\1\11\1\7\1\0\1\11\3\3"+
-    "\1\20\4\3\4\0\2\11\1\0\1\11\2\12\1\0"+
-    "\2\12\1\0\1\21\1\0\1\12\1\22\1\5\1\22"+
-    "\1\12\1\5\1\21\1\0\2\12\1\0\1\12\1\14"+
-    "\1\11\1\21\1\11\3\12\1\23\4\12\5\3\1\0"+
-    "\1\17\1\0\5\12\1\0\1\21\1\0";
+    "\1\12\1\3\1\13\1\14\1\5\1\14\1\15\1\7"+
+    "\1\16\1\11\1\17\1\20\2\3\1\0\2\3\3\0"+
+    "\1\21\2\3\1\4\1\5\1\4\1\3\1\5\2\0"+
+    "\1\21\1\3\1\0\3\5\1\0\1\5\4\0\2\3"+
+    "\1\0\1\3\1\6\1\11\1\0\1\11\1\21\1\3"+
+    "\1\0\3\5\1\11\1\7\1\0\1\11\20\0\2\11"+
+    "\1\0\1\11\2\0\3\3\1\22\6\3\2\13\1\0"+
+    "\2\13\3\0\1\23\2\13\1\14\1\5\1\14\1\13"+
+    "\1\5\2\0\1\23\3\13\1\0\1\13\1\15\1\11"+
+    "\1\0\1\11\1\23\1\13\2\24\1\0\3\24\1\25"+
+    "\1\24\1\26\1\24\3\13\1\27\6\13\2\20\1\0"+
+    "\2\20\1\30\1\0\1\30\1\31\1\32\5\3\3\0"+
+    "\1\21\1\3\3\24\1\33\6\24\5\13\3\0\1\23"+
+    "\1\13\2\30\1\0\3\30\1\0\1\30\1\34\1\35"+
+    "\3\20\1\36\6\20\6\24\1\25\1\24\1\26\1\24"+
+    "\3\30\1\37\6\30\5\20\1\30\1\0\1\30\1\31"+
+    "\1\32\6\30\1\0\1\30\1\34\1\35";
 
   private static int [] zzUnpackTrans() {
-    int [] result = new int[120];
+    int [] result = new int[250];
     int offset = 0;
     offset = zzUnpackTrans(ZZ_TRANS_PACKED_0, offset, result);
     return result;
@@ -171,10 +181,11 @@ class FishLexer implements FlexLexer {
   private static final int [] ZZ_ATTRIBUTE = zzUnpackAttribute();
 
   private static final String ZZ_ATTRIBUTE_PACKED_0 =
-    "\2\0\14\1\1\0\1\1\1\0\2\1";
+    "\2\0\5\1\1\11\10\1\1\0\1\1\2\0\1\11"+
+    "\1\0\1\1\2\0\1\1\2\0\2\1\1\0";
 
   private static int [] zzUnpackAttribute() {
-    int [] result = new int[19];
+    int [] result = new int[31];
     int offset = 0;
     offset = zzUnpackAttribute(ZZ_ATTRIBUTE_PACKED_0, offset, result);
     return result;
@@ -491,27 +502,32 @@ class FishLexer implements FlexLexer {
             { yybegin(YYINITIAL); return FishTypes.COMMAND;
             } 
             // fall through
-          case 6: break;
+          case 7: break;
           case 2: 
             { yybegin(YYINITIAL); return TokenType.WHITE_SPACE;
             } 
             // fall through
-          case 7: break;
+          case 8: break;
           case 3: 
-            { yybegin(WAITING_ARG); return FishTypes.SEPARATOR;
+            { yybegin(WAITING_ARGS); return FishTypes.SEPARATOR;
             } 
             // fall through
-          case 8: break;
+          case 9: break;
           case 4: 
             { return TokenType.BAD_CHARACTER;
             } 
             // fall through
-          case 9: break;
+          case 10: break;
           case 5: 
-            { yybegin(WAITING_ARG); return FishTypes.ARG;
+            { yybegin(WAITING_ARGS); return FishTypes.ARG;
             } 
             // fall through
-          case 10: break;
+          case 11: break;
+          case 6: 
+            { yybegin(WAITING_ARGS); return FishTypes.STRING;
+            } 
+            // fall through
+          case 12: break;
           default:
             zzScanError(ZZ_NO_MATCH);
           }

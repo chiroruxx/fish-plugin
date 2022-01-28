@@ -15,6 +15,7 @@ public interface FishTypes {
   IElementType COMMAND = new FishTokenType("COMMAND");
   IElementType CRLF = new FishTokenType("CRLF");
   IElementType SEPARATOR = new FishTokenType("SEPARATOR");
+  IElementType STRING = new FishTokenType("STRING");
 
   class Factory {
     public static PsiElement createElement(ASTNode node) {

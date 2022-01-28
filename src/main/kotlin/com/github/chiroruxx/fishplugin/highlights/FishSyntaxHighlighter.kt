@@ -17,7 +17,7 @@ class FishSyntaxHighlighter : SyntaxHighlighterBase() {
     override fun getTokenHighlights(tokenType: IElementType): Array<TextAttributesKey> {
         return when (tokenType) {
             FishTypes.COMMAND -> COMMAND_KEYS
-            FishTypes.ARG -> ARG_KEYS
+            FishTypes.STRING -> STRING_KEYS
             TokenType.BAD_CHARACTER -> BAD_CHAR_KEYS
             else -> EMPTY_KEYS
         }
@@ -25,15 +25,15 @@ class FishSyntaxHighlighter : SyntaxHighlighterBase() {
 
     companion object {
         private val COMMAND: TextAttributesKey =
-            createTextAttributesKey("FISH_KEY", DefaultLanguageHighlighterColors.KEYWORD)
-        private val ARG: TextAttributesKey =
-            createTextAttributesKey("FISH_VALUE", DefaultLanguageHighlighterColors.STRING)
+            createTextAttributesKey("FISH_COMMAND", DefaultLanguageHighlighterColors.KEYWORD)
+        private val STRING: TextAttributesKey =
+            createTextAttributesKey("FISH_STRING", DefaultLanguageHighlighterColors.STRING)
         private val BAD_CHARACTER: TextAttributesKey =
             createTextAttributesKey("FISH_BAD_CHARACTER", HighlighterColors.BAD_CHARACTER)
 
         private val BAD_CHAR_KEYS = arrayOf(BAD_CHARACTER)
         private val COMMAND_KEYS = arrayOf(COMMAND)
-        private val ARG_KEYS = arrayOf(ARG)
+        private val STRING_KEYS = arrayOf(STRING)
         private val EMPTY_KEYS = arrayOf<TextAttributesKey>()
     }
 }

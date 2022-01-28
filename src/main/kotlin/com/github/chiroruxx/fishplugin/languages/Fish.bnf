@@ -19,4 +19,4 @@ fishFile ::= item_*
 private item_ ::= (sentence|CRLF)
 
 sentence ::= COMMAND [SEPARATOR args]
-args ::= ARG [SEPARATOR args]
+args ::= (ARG|STRING) [SEPARATOR args]

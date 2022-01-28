@@ -20,7 +20,7 @@ class FishParserDefinition : ParserDefinition {
 
     override fun getCommentTokens(): TokenSet = TokenSet.EMPTY
 
-    override fun getStringLiteralElements(): TokenSet = TokenSet.EMPTY
+    override fun getStringLiteralElements(): TokenSet = STRINGS
 
     override fun createParser(project: Project?): PsiParser = FishParser()
 
@@ -35,6 +35,7 @@ class FishParserDefinition : ParserDefinition {
 
     companion object {
         val WHITE_SPACES = TokenSet.create(TokenType.WHITE_SPACE)
+        val STRINGS = TokenSet.create(FishTypes.STRING)
         val FILE = IFileElementType(FishLanguage)
     }
 }

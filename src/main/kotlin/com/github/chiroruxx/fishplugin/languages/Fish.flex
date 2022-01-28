@@ -18,23 +18,23 @@ import com.intellij.psi.TokenType;
 
 CRLF=\R
 WHITE_SPACE=[\ \t\f]
-CHARACTER=[^\ \n\f\\] | "\\"{CRLF} | "\\".
+CHARACTER=[^\ \n\f\\'] | "\\"{CRLF} | "\\".
 SEPARATOR={WHITE_SPACE}+
+SINGLE_QUOTE_STRING="'"({CHARACTER}|{WHITE_SPACE})*"'"
+DOUBLE_QUOTE_STRING="\""({CHARACTER}|{WHITE_SPACE})*"\""
 
-%state WAITING_ARG
+%state WAITING_ARGS
 
 %%
 
-<YYINITIAL> {CHARACTER}+                                    { yybegin(YYINITIAL); return FishTypes.COMMAND; }
+<YYINITIAL> {CHARACTER}+                                     { yybegin(YYINITIAL); return FishTypes.COMMAND; }
+<YYINITIAL> {SEPARATOR}                                      { yybegin(WAITING_ARGS); return FishTypes.SEPARATOR; }
 
-<YYINITIAL> {SEPARATOR}                                     { yybegin(WAITING_ARG); return FishTypes.SEPARATOR; }
+<WAITING_ARGS> {WHITE_SPACE}+                                { yybegin(WAITING_ARGS); return FishTypes.SEPARATOR; }
+<WAITING_ARGS> ({SINGLE_QUOTE_STRING}|{DOUBLE_QUOTE_STRING}) { yybegin(WAITING_ARGS); return FishTypes.STRING; }
+<WAITING_ARGS> {CHARACTER}+                                  { yybegin(WAITING_ARGS); return FishTypes.ARG; }
+<WAITING_ARGS> {CRLF}                                        { yybegin(YYINITIAL); return TokenType.WHITE_SPACE; }
 
-<WAITING_ARG> {CRLF}                                        { yybegin(YYINITIAL); return TokenType.WHITE_SPACE; }
+{CRLF}+                                                      { yybegin(YYINITIAL); return TokenType.WHITE_SPACE; }
 
-<WAITING_ARG> {WHITE_SPACE}+                                { yybegin(WAITING_ARG); return FishTypes.SEPARATOR; }
-
-<WAITING_ARG> {CHARACTER}+                                  { yybegin(WAITING_ARG); return FishTypes.ARG; }
-
-{CRLF}+                                                     { yybegin(YYINITIAL); return TokenType.WHITE_SPACE; }
-
-[^]                                                         { return TokenType.BAD_CHARACTER; }
+[^]                                                          { return TokenType.BAD_CHARACTER; }
