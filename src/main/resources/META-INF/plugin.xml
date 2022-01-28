@@ -17,8 +17,10 @@
         <lang.parserDefinition language="Fish"
                                implementationClass="com.github.chiroruxx.fishplugin.languages.FishParserDefinition"/>
         <lang.syntaxHighlighterFactory language="Fish"
-                                       implementationClass="com.github.chiroruxx.fishplugin.highlights.FishSyntaxHighlighterFactory"/>    </extensions>
-
+                                       implementationClass="com.github.chiroruxx.fishplugin.highlights.FishSyntaxHighlighterFactory"/>
+        <completion.contributor language="Fish"
+                                implementationClass="com.github.chiroruxx.fishplugin.completions.FishCompletionContributor"/>
+    </extensions>
     <applicationListeners>
         <listener class="com.github.chiroruxx.fishplugin.listeners.MyProjectManagerListener"
                   topic="com.intellij.openapi.project.ProjectManagerListener"/>
