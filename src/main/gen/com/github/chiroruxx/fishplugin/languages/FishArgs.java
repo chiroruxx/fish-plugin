@@ -7,7 +7,4 @@ import com.intellij.psi.PsiElement;
 
 public interface FishArgs extends PsiElement {
 
-  @Nullable
-  FishArgs getArgs();
-
 }

@@ -18,6 +18,7 @@ class FishSyntaxHighlighter : SyntaxHighlighterBase() {
         return when (tokenType) {
             FishTypes.COMMAND -> COMMAND_KEYS
             FishTypes.STRING -> STRING_KEYS
+            FishTypes.REDIRECT -> REDIRECT_KEYS
             TokenType.BAD_CHARACTER -> BAD_CHAR_KEYS
             else -> EMPTY_KEYS
         }
@@ -28,12 +29,15 @@ class FishSyntaxHighlighter : SyntaxHighlighterBase() {
             createTextAttributesKey("FISH_COMMAND", DefaultLanguageHighlighterColors.KEYWORD)
         private val STRING: TextAttributesKey =
             createTextAttributesKey("FISH_STRING", DefaultLanguageHighlighterColors.STRING)
+        private val REDIRECT: TextAttributesKey =
+            createTextAttributesKey("FISH_REDIRECT", DefaultLanguageHighlighterColors.KEYWORD)
         private val BAD_CHARACTER: TextAttributesKey =
             createTextAttributesKey("FISH_BAD_CHARACTER", HighlighterColors.BAD_CHARACTER)
 
         private val BAD_CHAR_KEYS = arrayOf(BAD_CHARACTER)
         private val COMMAND_KEYS = arrayOf(COMMAND)
         private val STRING_KEYS = arrayOf(STRING)
+        private val REDIRECT_KEYS = arrayOf(REDIRECT)
         private val EMPTY_KEYS = arrayOf<TextAttributesKey>()
     }
 }

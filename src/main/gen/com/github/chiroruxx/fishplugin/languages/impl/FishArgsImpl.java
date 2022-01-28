@@ -27,10 +27,4 @@ public class FishArgsImpl extends ASTWrapperPsiElement implements FishArgs {
     else super.accept(visitor);
   }
 
-  @Override
-  @Nullable
-  public FishArgs getArgs() {
-    return findChildByClass(FishArgs.class);
-  }
-
 }

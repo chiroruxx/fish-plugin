@@ -14,6 +14,8 @@ public interface FishTypes {
   IElementType ARG = new FishTokenType("ARG");
   IElementType COMMAND = new FishTokenType("COMMAND");
   IElementType CRLF = new FishTokenType("CRLF");
+  IElementType REDIRECT = new FishTokenType("REDIRECT");
+  IElementType REDIRECT_FILE = new FishTokenType("REDIRECT_FILE");
   IElementType SEPARATOR = new FishTokenType("SEPARATOR");
   IElementType STRING = new FishTokenType("STRING");
 
