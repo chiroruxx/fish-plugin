@@ -36,10 +36,9 @@ public class FishParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // (ARG|STRING)+
+  // (ARG|OLD_STRING|string)+
   public static boolean args(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "args")) return false;
-    if (!nextTokenIs(b, "<args>", ARG, STRING)) return false;
     boolean r;
     Marker m = enter_section_(b, l, _NONE_, ARGS, "<args>");
     r = args_0(b, l + 1);
@@ -52,12 +51,13 @@ public class FishParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // ARG|STRING
+  // ARG|OLD_STRING|string
   private static boolean args_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "args_0")) return false;
     boolean r;
     r = consumeToken(b, ARG);
-    if (!r) r = consumeToken(b, STRING);
+    if (!r) r = consumeToken(b, OLD_STRING);
+    if (!r) r = string(b, l + 1);
     return r;
   }
 
@@ -110,6 +110,18 @@ public class FishParser implements PsiParser, LightPsiParser {
     if (!recursion_guard_(b, l, "sentence_2")) return false;
     parseTokens(b, 0, REDIRECT, REDIRECT_FILE);
     return true;
+  }
+
+  /* ********************************************************** */
+  // QUOTE STRING_CHARACTERS QUOTE
+  public static boolean string(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "string")) return false;
+    if (!nextTokenIs(b, QUOTE)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeTokens(b, 0, QUOTE, STRING_CHARACTERS, QUOTE);
+    exit_section_(b, m, STRING, r);
+    return r;
   }
 
 }

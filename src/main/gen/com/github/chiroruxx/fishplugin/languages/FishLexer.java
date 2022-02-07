@@ -550,7 +550,7 @@ class FishLexer implements FlexLexer {
             // fall through
           case 17: break;
           case 9: 
-            { yybegin(WAITING_ARGS); return FishTypes.STRING;
+            { yybegin(WAITING_ARGS); return FishTypes.OLD_STRING;
             } 
             // fall through
           case 18: break;

@@ -17,7 +17,7 @@ class FishSyntaxHighlighter : SyntaxHighlighterBase() {
     override fun getTokenHighlights(tokenType: IElementType): Array<TextAttributesKey> {
         return when (tokenType) {
             FishTypes.COMMAND -> COMMAND_KEYS
-            FishTypes.STRING -> STRING_KEYS
+            FishTypes.OLD_STRING -> STRING_KEYS
             FishTypes.REDIRECT -> REDIRECT_KEYS
             TokenType.BAD_CHARACTER -> BAD_CHAR_KEYS
             else -> EMPTY_KEYS
