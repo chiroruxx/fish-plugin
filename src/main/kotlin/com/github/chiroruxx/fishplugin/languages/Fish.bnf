@@ -19,4 +19,4 @@ fishFile ::= item_*
 private item_ ::= (sentence|CRLF)
 
 sentence ::= COMMAND [args] [REDIRECT REDIRECT_FILE]
-args ::= (ARG|STRING)*
+args ::= (ARG|STRING)+

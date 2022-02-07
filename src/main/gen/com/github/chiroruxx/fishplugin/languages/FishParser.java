@@ -36,17 +36,20 @@ public class FishParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // (ARG|STRING)*
+  // (ARG|STRING)+
   public static boolean args(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "args")) return false;
+    if (!nextTokenIs(b, "<args>", ARG, STRING)) return false;
+    boolean r;
     Marker m = enter_section_(b, l, _NONE_, ARGS, "<args>");
-    while (true) {
+    r = args_0(b, l + 1);
+    while (r) {
       int c = current_position_(b);
       if (!args_0(b, l + 1)) break;
       if (!empty_element_parsed_guard_(b, "args", c)) break;
     }
-    exit_section_(b, l, m, true, false, null);
-    return true;
+    exit_section_(b, l, m, r, false, null);
+    return r;
   }
 
   // ARG|STRING
