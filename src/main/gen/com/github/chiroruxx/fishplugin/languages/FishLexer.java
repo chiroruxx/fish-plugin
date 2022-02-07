@@ -25,7 +25,8 @@ class FishLexer implements FlexLexer {
   /** lexical states */
   public static final int YYINITIAL = 0;
   public static final int WAITING_ARGS = 2;
-  public static final int WAITING_REDIRECT_FILE = 4;
+  public static final int WAITING_STRING = 4;
+  public static final int WAITING_REDIRECT_FILE = 6;
 
   /**
    * ZZ_LEXSTATE[l] is the state in the DFA for the lexical state l
@@ -34,7 +35,7 @@ class FishLexer implements FlexLexer {
    * l is of the form l = 2*k, k a non negative integer
    */
   private static final int ZZ_LEXSTATE[] = { 
-     0,  0,  1,  1,  2, 2
+     0,  0,  1,  1,  2,  2,  3, 3
   };
 
   /** 
@@ -65,13 +66,14 @@ class FishLexer implements FlexLexer {
   private static final int [] ZZ_ACTION = zzUnpackAction();
 
   private static final String ZZ_ACTION_PACKED_0 =
-    "\3\0\2\1\1\2\1\1\1\3\1\4\1\3\1\4"+
-    "\2\5\1\3\2\4\1\5\1\6\2\7\2\10\1\4"+
-    "\1\0\1\1\2\0\1\11\5\0\1\11\1\0\1\7"+
-    "\1\5\2\0\1\11\1\5\1\0";
+    "\4\0\2\1\1\2\1\1\1\3\1\4\1\3\1\4"+
+    "\2\5\1\3\1\6\1\4\1\5\1\7\2\10\1\11"+
+    "\1\4\2\12\2\13\1\4\1\0\1\1\5\0\1\14"+
+    "\1\0\1\10\1\0\1\12\1\5\1\0\1\14\1\5"+
+    "\1\0";
 
   private static int [] zzUnpackAction() {
-    int [] result = new int[42];
+    int [] result = new int[45];
     int offset = 0;
     offset = zzUnpackAction(ZZ_ACTION_PACKED_0, offset, result);
     return result;
@@ -97,14 +99,14 @@ class FishLexer implements FlexLexer {
 
   private static final String ZZ_ROWMAP_PACKED_0 =
     "\0\0\0\13\0\26\0\41\0\54\0\67\0\102\0\115"+
-    "\0\130\0\143\0\156\0\171\0\204\0\217\0\232\0\245"+
-    "\0\260\0\171\0\273\0\306\0\67\0\130\0\321\0\156"+
-    "\0\334\0\347\0\232\0\130\0\362\0\171\0\375\0\u0108"+
-    "\0\u0113\0\260\0\321\0\u011e\0\u0129\0\u0134\0\u013f\0\u0108"+
-    "\0\u014a\0\u0155";
+    "\0\130\0\143\0\156\0\171\0\204\0\217\0\232\0\143"+
+    "\0\245\0\260\0\204\0\273\0\306\0\143\0\321\0\334"+
+    "\0\347\0\102\0\143\0\362\0\171\0\375\0\u0108\0\204"+
+    "\0\u0113\0\u011e\0\u0129\0\260\0\321\0\u0134\0\362\0\u013f"+
+    "\0\u014a\0\u0155\0\u011e\0\u0160\0\u016b";
 
   private static int [] zzUnpackRowMap() {
-    int [] result = new int[42];
+    int [] result = new int[45];
     int offset = 0;
     offset = zzUnpackRowMap(ZZ_ROWMAP_PACKED_0, offset, result);
     return result;
@@ -127,33 +129,35 @@ class FishLexer implements FlexLexer {
   private static final int [] ZZ_TRANS = zzUnpackTrans();
 
   private static final String ZZ_TRANS_PACKED_0 =
-    "\1\4\1\5\1\6\1\5\1\7\1\10\1\11\1\12"+
-    "\1\13\2\4\1\14\1\15\1\6\1\15\1\16\1\10"+
-    "\1\17\1\12\1\20\1\21\1\22\1\23\1\24\1\6"+
-    "\1\24\1\23\1\25\1\11\1\26\1\27\2\23\2\4"+
-    "\1\0\2\4\3\0\1\30\3\4\1\5\1\6\1\5"+
-    "\1\4\1\6\2\0\1\30\2\4\1\0\3\6\1\0"+
-    "\1\6\5\0\2\4\1\0\1\4\1\7\1\12\1\0"+
-    "\1\12\1\30\2\4\1\0\3\6\1\12\1\10\1\0"+
-    "\1\12\22\0\2\12\1\0\1\12\3\0\3\4\1\31"+
-    "\7\4\2\14\1\0\2\14\3\0\1\32\3\14\1\15"+
-    "\1\6\1\15\1\14\1\6\2\0\1\32\4\14\1\0"+
-    "\1\14\1\16\1\12\1\0\1\12\1\32\2\14\2\33"+
-    "\1\0\3\33\1\34\1\33\1\35\2\33\3\36\1\37"+
-    "\7\36\2\21\1\0\2\21\1\40\1\0\1\40\1\41"+
-    "\1\42\1\21\2\23\1\0\2\23\3\0\1\43\3\23"+
-    "\1\24\1\6\1\24\1\23\1\6\2\0\1\43\5\23"+
-    "\1\44\7\23\5\4\3\0\1\30\2\4\3\14\1\45"+
-    "\7\14\3\33\1\46\7\33\2\14\1\36\2\14\3\0"+
-    "\1\32\2\14\2\40\1\0\3\40\1\0\1\40\1\47"+
-    "\1\50\1\40\3\21\1\51\7\21\5\23\3\0\1\43"+
-    "\2\23\5\14\3\0\1\32\2\14\6\33\1\34\1\33"+
-    "\1\35\2\33\3\40\1\52\7\40\5\21\1\40\1\0"+
-    "\1\40\1\41\1\42\1\21\6\40\1\0\1\40\1\47"+
-    "\1\50\1\40";
+    "\1\5\1\6\1\7\1\6\1\10\1\11\1\12\1\13"+
+    "\1\14\2\5\1\15\1\16\1\7\1\16\1\17\1\11"+
+    "\1\20\1\13\1\21\1\22\1\23\1\24\1\25\1\7"+
+    "\1\25\1\24\1\25\1\26\1\24\1\27\2\24\1\30"+
+    "\1\31\1\7\1\31\1\30\1\32\1\12\1\33\1\34"+
+    "\2\30\2\5\1\0\2\5\3\0\1\35\3\5\1\6"+
+    "\1\7\1\6\1\5\1\7\2\0\1\35\2\5\1\0"+
+    "\3\7\1\0\1\7\5\0\2\5\1\0\1\5\1\10"+
+    "\1\13\1\0\1\13\1\35\2\5\1\0\3\7\1\13"+
+    "\1\11\1\0\1\13\22\0\2\13\1\0\1\13\3\0"+
+    "\3\5\1\36\7\5\2\15\1\0\2\15\3\0\1\37"+
+    "\3\15\1\16\1\7\1\16\1\15\1\7\2\0\1\37"+
+    "\4\15\1\0\1\15\1\17\1\13\1\0\1\13\1\37"+
+    "\2\15\3\40\1\41\7\40\2\22\1\0\2\22\1\42"+
+    "\1\0\1\42\1\43\1\44\1\22\2\24\1\0\3\24"+
+    "\1\0\1\24\1\45\3\24\1\25\1\7\1\25\1\24"+
+    "\1\25\1\0\1\24\1\45\5\24\1\46\7\24\2\30"+
+    "\1\0\2\30\3\0\1\47\3\30\1\31\1\7\1\31"+
+    "\1\30\1\7\2\0\1\47\5\30\1\50\7\30\5\5"+
+    "\3\0\1\35\2\5\3\15\1\51\11\15\1\40\2\15"+
+    "\3\0\1\37\2\15\2\42\1\0\3\42\1\0\1\42"+
+    "\1\52\1\53\1\42\3\22\1\54\7\22\6\24\1\0"+
+    "\1\24\1\45\2\24\5\30\3\0\1\47\2\30\5\15"+
+    "\3\0\1\37\2\15\3\42\1\55\7\42\5\22\1\42"+
+    "\1\0\1\42\1\43\1\44\1\22\6\42\1\0\1\42"+
+    "\1\52\1\53\1\42";
 
   private static int [] zzUnpackTrans() {
-    int [] result = new int[352];
+    int [] result = new int[374];
     int offset = 0;
     offset = zzUnpackTrans(ZZ_TRANS_PACKED_0, offset, result);
     return result;
@@ -191,12 +195,12 @@ class FishLexer implements FlexLexer {
   private static final int [] ZZ_ATTRIBUTE = zzUnpackAttribute();
 
   private static final String ZZ_ATTRIBUTE_PACKED_0 =
-    "\3\0\5\1\1\11\14\1\1\11\1\1\1\0\1\1"+
-    "\2\0\1\11\5\0\1\1\1\0\2\1\2\0\2\1"+
-    "\1\0";
+    "\4\0\5\1\1\11\5\1\1\11\5\1\1\11\4\1"+
+    "\1\11\1\1\1\0\1\1\5\0\1\1\1\0\1\1"+
+    "\1\0\2\1\1\0\2\1\1\0";
 
   private static int [] zzUnpackAttribute() {
-    int [] result = new int[42];
+    int [] result = new int[45];
     int offset = 0;
     offset = zzUnpackAttribute(ZZ_ATTRIBUTE_PACKED_0, offset, result);
     return result;
@@ -513,47 +517,62 @@ class FishLexer implements FlexLexer {
             { yybegin(YYINITIAL); return FishTypes.COMMAND;
             } 
             // fall through
-          case 10: break;
+          case 13: break;
           case 2: 
             { yybegin(YYINITIAL); return TokenType.WHITE_SPACE;
             } 
             // fall through
-          case 11: break;
+          case 14: break;
           case 3: 
             { yybegin(WAITING_ARGS); return TokenType.WHITE_SPACE;
             } 
             // fall through
-          case 12: break;
+          case 15: break;
           case 4: 
             { return TokenType.BAD_CHARACTER;
             } 
             // fall through
-          case 13: break;
+          case 16: break;
           case 5: 
             { yybegin(WAITING_ARGS); return FishTypes.ARG;
             } 
             // fall through
-          case 14: break;
-          case 6: 
-            { yybegin(WAITING_REDIRECT_FILE); return FishTypes.REDIRECT;
-            } 
-            // fall through
-          case 15: break;
-          case 7: 
-            { yybegin(WAITING_REDIRECT_FILE); return FishTypes.REDIRECT_FILE;
-            } 
-            // fall through
-          case 16: break;
-          case 8: 
-            { yybegin(WAITING_REDIRECT_FILE); return TokenType.WHITE_SPACE;
-            } 
-            // fall through
           case 17: break;
-          case 9: 
-            { yybegin(WAITING_ARGS); return FishTypes.OLD_STRING;
+          case 6: 
+            { yybegin(WAITING_STRING); return FishTypes.QUOTE;
             } 
             // fall through
           case 18: break;
+          case 7: 
+            { yybegin(WAITING_REDIRECT_FILE); return FishTypes.REDIRECT;
+            } 
+            // fall through
+          case 19: break;
+          case 8: 
+            { yybegin(WAITING_STRING); return FishTypes.STRING_CHARACTERS;
+            } 
+            // fall through
+          case 20: break;
+          case 9: 
+            { yybegin(WAITING_ARGS); return FishTypes.QUOTE;
+            } 
+            // fall through
+          case 21: break;
+          case 10: 
+            { yybegin(WAITING_REDIRECT_FILE); return FishTypes.REDIRECT_FILE;
+            } 
+            // fall through
+          case 22: break;
+          case 11: 
+            { yybegin(WAITING_REDIRECT_FILE); return TokenType.WHITE_SPACE;
+            } 
+            // fall through
+          case 23: break;
+          case 12: 
+            { yybegin(WAITING_ARGS); return FishTypes.OLD_STRING;
+            } 
+            // fall through
+          case 24: break;
           default:
             zzScanError(ZZ_NO_MATCH);
           }

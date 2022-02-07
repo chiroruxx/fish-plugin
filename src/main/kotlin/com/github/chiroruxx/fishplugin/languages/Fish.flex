@@ -19,32 +19,40 @@ import com.intellij.psi.TokenType;
 CRLF=\R
 WHITE_SPACE=[\ \t\f]
 CHARACTER=[^'\ \n\f\\] | "\\"{CRLF} | "\\".
+
 SEPARATOR={WHITE_SPACE}+
-SINGLE_QUOTE_STRING="'"({CHARACTER}|{WHITE_SPACE})*"'"
 DOUBLE_QUOTE_STRING="\""({CHARACTER}|{WHITE_SPACE})*"\""
+QUOTE="'"
+STRING_CHARACTER={CHARACTER}|{WHITE_SPACE}
+
 REDIRECT=[<>]
 REDIRECT_FILE={CHARACTER}+
 ARG_ONE_CHARACTER=[^'<>\ \n\f\\]
 ARG={ARG_ONE_CHARACTER}|{CHARACTER}{CHARACTER}+
 
 %state WAITING_ARGS
+%state WAITING_STRING
 %state WAITING_REDIRECT_FILE
 
 %%
 
-<YYINITIAL> {CHARACTER}+                                     { yybegin(YYINITIAL); return FishTypes.COMMAND; }
-<YYINITIAL> {SEPARATOR}                                      { yybegin(WAITING_ARGS); return TokenType.WHITE_SPACE; }
+<YYINITIAL> {CHARACTER}+                { yybegin(YYINITIAL); return FishTypes.COMMAND; }
+<YYINITIAL> {SEPARATOR}                 { yybegin(WAITING_ARGS); return TokenType.WHITE_SPACE; }
 
-<WAITING_ARGS> {WHITE_SPACE}+                                { yybegin(WAITING_ARGS); return TokenType.WHITE_SPACE; }
-<WAITING_ARGS> ({SINGLE_QUOTE_STRING}|{DOUBLE_QUOTE_STRING}) { yybegin(WAITING_ARGS); return FishTypes.OLD_STRING; }
-<WAITING_ARGS> {ARG}+                                        { yybegin(WAITING_ARGS); return FishTypes.ARG; }
-<WAITING_ARGS> {REDIRECT}                                    { yybegin(WAITING_REDIRECT_FILE); return FishTypes.REDIRECT; }
-<WAITING_ARGS> {CRLF}                                        { yybegin(YYINITIAL); return TokenType.WHITE_SPACE; }
+<WAITING_ARGS> {WHITE_SPACE}+           { yybegin(WAITING_ARGS); return TokenType.WHITE_SPACE; }
+<WAITING_ARGS> {DOUBLE_QUOTE_STRING}    { yybegin(WAITING_ARGS); return FishTypes.OLD_STRING; }
+<WAITING_ARGS> {QUOTE}                  { yybegin(WAITING_STRING); return FishTypes.QUOTE; }
+<WAITING_ARGS> {ARG}+                   { yybegin(WAITING_ARGS); return FishTypes.ARG; }
+<WAITING_ARGS> {REDIRECT}               { yybegin(WAITING_REDIRECT_FILE); return FishTypes.REDIRECT; }
+<WAITING_ARGS> {CRLF}                   { yybegin(YYINITIAL); return TokenType.WHITE_SPACE; }
 
-<WAITING_REDIRECT_FILE> {REDIRECT_FILE}                      { yybegin(WAITING_REDIRECT_FILE); return FishTypes.REDIRECT_FILE; }
-<WAITING_REDIRECT_FILE> {WHITE_SPACE}                        { yybegin(WAITING_REDIRECT_FILE); return TokenType.WHITE_SPACE; }
-<WAITING_REDIRECT_FILE> {CRLF}                               { yybegin(YYINITIAL); return TokenType.WHITE_SPACE; }
+<WAITING_STRING> {QUOTE}                { yybegin(WAITING_ARGS); return FishTypes.QUOTE; }
+<WAITING_STRING> {STRING_CHARACTER}+    { yybegin(WAITING_STRING); return FishTypes.STRING_CHARACTERS; }
 
-{CRLF}+                                                      { yybegin(YYINITIAL); return TokenType.WHITE_SPACE; }
+<WAITING_REDIRECT_FILE> {REDIRECT_FILE} { yybegin(WAITING_REDIRECT_FILE); return FishTypes.REDIRECT_FILE; }
+<WAITING_REDIRECT_FILE> {WHITE_SPACE}   { yybegin(WAITING_REDIRECT_FILE); return TokenType.WHITE_SPACE; }
+<WAITING_REDIRECT_FILE> {CRLF}          { yybegin(YYINITIAL); return TokenType.WHITE_SPACE; }
 
-[^]                                                          { return TokenType.BAD_CHARACTER; }
+{CRLF}+                                 { yybegin(YYINITIAL); return TokenType.WHITE_SPACE; }
+
+[^]                                     { return TokenType.BAD_CHARACTER; }

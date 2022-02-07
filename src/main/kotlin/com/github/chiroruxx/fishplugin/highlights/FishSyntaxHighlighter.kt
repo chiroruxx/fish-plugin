@@ -18,6 +18,8 @@ class FishSyntaxHighlighter : SyntaxHighlighterBase() {
         return when (tokenType) {
             FishTypes.COMMAND -> COMMAND_KEYS
             FishTypes.OLD_STRING -> STRING_KEYS
+            FishTypes.QUOTE -> STRING_KEYS
+            FishTypes.STRING_CHARACTERS -> STRING_KEYS
             FishTypes.REDIRECT -> REDIRECT_KEYS
             TokenType.BAD_CHARACTER -> BAD_CHAR_KEYS
             else -> EMPTY_KEYS
