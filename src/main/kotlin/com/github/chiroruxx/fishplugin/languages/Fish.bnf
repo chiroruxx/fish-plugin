@@ -18,5 +18,5 @@ fishFile ::= item_*
 
 private item_ ::= (sentence|CRLF)
 
-sentence ::= COMMAND [SEPARATOR args] [SEPARATOR REDIRECT REDIRECT_FILE]
-args ::= (ARG|STRING) {SEPARATOR (ARG|STRING)}*
+sentence ::= COMMAND [args] [REDIRECT REDIRECT_FILE]
+args ::= (ARG|STRING)*

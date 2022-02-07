@@ -16,7 +16,6 @@ public interface FishTypes {
   IElementType CRLF = new FishTokenType("CRLF");
   IElementType REDIRECT = new FishTokenType("REDIRECT");
   IElementType REDIRECT_FILE = new FishTokenType("REDIRECT_FILE");
-  IElementType SEPARATOR = new FishTokenType("SEPARATOR");
   IElementType STRING = new FishTokenType("STRING");
 
   class Factory {

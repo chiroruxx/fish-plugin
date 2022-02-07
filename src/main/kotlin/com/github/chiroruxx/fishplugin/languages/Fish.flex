@@ -33,9 +33,9 @@ ARG={ARG_ONE_CHARACTER}|{CHARACTER}{CHARACTER}+
 %%
 
 <YYINITIAL> {CHARACTER}+                                     { yybegin(YYINITIAL); return FishTypes.COMMAND; }
-<YYINITIAL> {SEPARATOR}                                      { yybegin(WAITING_ARGS); return FishTypes.SEPARATOR; }
+<YYINITIAL> {SEPARATOR}                                      { yybegin(WAITING_ARGS); return TokenType.WHITE_SPACE; }
 
-<WAITING_ARGS> {WHITE_SPACE}+                                { yybegin(WAITING_ARGS); return FishTypes.SEPARATOR; }
+<WAITING_ARGS> {WHITE_SPACE}+                                { yybegin(WAITING_ARGS); return TokenType.WHITE_SPACE; }
 <WAITING_ARGS> ({SINGLE_QUOTE_STRING}|{DOUBLE_QUOTE_STRING}) { yybegin(WAITING_ARGS); return FishTypes.STRING; }
 <WAITING_ARGS> {ARG}+                                        { yybegin(WAITING_ARGS); return FishTypes.ARG; }
 <WAITING_ARGS> {REDIRECT}                                    { yybegin(WAITING_REDIRECT_FILE); return FishTypes.REDIRECT; }

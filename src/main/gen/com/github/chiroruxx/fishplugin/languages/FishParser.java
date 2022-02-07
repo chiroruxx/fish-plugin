@@ -36,52 +36,22 @@ public class FishParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // (ARG|STRING) {SEPARATOR (ARG|STRING)}*
+  // (ARG|STRING)*
   public static boolean args(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "args")) return false;
-    if (!nextTokenIs(b, "<args>", ARG, STRING)) return false;
-    boolean r;
     Marker m = enter_section_(b, l, _NONE_, ARGS, "<args>");
-    r = args_0(b, l + 1);
-    r = r && args_1(b, l + 1);
-    exit_section_(b, l, m, r, false, null);
-    return r;
+    while (true) {
+      int c = current_position_(b);
+      if (!args_0(b, l + 1)) break;
+      if (!empty_element_parsed_guard_(b, "args", c)) break;
+    }
+    exit_section_(b, l, m, true, false, null);
+    return true;
   }
 
   // ARG|STRING
   private static boolean args_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "args_0")) return false;
-    boolean r;
-    r = consumeToken(b, ARG);
-    if (!r) r = consumeToken(b, STRING);
-    return r;
-  }
-
-  // {SEPARATOR (ARG|STRING)}*
-  private static boolean args_1(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "args_1")) return false;
-    while (true) {
-      int c = current_position_(b);
-      if (!args_1_0(b, l + 1)) break;
-      if (!empty_element_parsed_guard_(b, "args_1", c)) break;
-    }
-    return true;
-  }
-
-  // SEPARATOR (ARG|STRING)
-  private static boolean args_1_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "args_1_0")) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = consumeToken(b, SEPARATOR);
-    r = r && args_1_0_1(b, l + 1);
-    exit_section_(b, m, null, r);
-    return r;
-  }
-
-  // ARG|STRING
-  private static boolean args_1_0_1(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "args_1_0_1")) return false;
     boolean r;
     r = consumeToken(b, ARG);
     if (!r) r = consumeToken(b, STRING);
@@ -112,7 +82,7 @@ public class FishParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // COMMAND [SEPARATOR args] [SEPARATOR REDIRECT REDIRECT_FILE]
+  // COMMAND [args] [REDIRECT REDIRECT_FILE]
   public static boolean sentence(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "sentence")) return false;
     if (!nextTokenIs(b, COMMAND)) return false;
@@ -125,28 +95,17 @@ public class FishParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // [SEPARATOR args]
+  // [args]
   private static boolean sentence_1(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "sentence_1")) return false;
-    sentence_1_0(b, l + 1);
+    args(b, l + 1);
     return true;
   }
 
-  // SEPARATOR args
-  private static boolean sentence_1_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "sentence_1_0")) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = consumeToken(b, SEPARATOR);
-    r = r && args(b, l + 1);
-    exit_section_(b, m, null, r);
-    return r;
-  }
-
-  // [SEPARATOR REDIRECT REDIRECT_FILE]
+  // [REDIRECT REDIRECT_FILE]
   private static boolean sentence_2(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "sentence_2")) return false;
-    parseTokens(b, 0, SEPARATOR, REDIRECT, REDIRECT_FILE);
+    parseTokens(b, 0, REDIRECT, REDIRECT_FILE);
     return true;
   }
 
