@@ -22,6 +22,8 @@ CHARACTER=[^'\"\ \n\f\\] | "\\"{CRLF} | "\\".
 
 SEPARATOR={WHITE_SPACE}+
 SINGLE_QUOTE="'"
+SINGLE_QUOTE_STRING_CHARACTER=[^'\n\\] | "\\"[^'\\]
+SINGLE_QUOTE_ESCAPE_SEQUENCE="\\"['\\]
 DOUBLE_QUOTE="\""
 STRING_CHARACTER={CHARACTER}|{WHITE_SPACE}
 
@@ -37,26 +39,27 @@ ARG={ARG_ONE_CHARACTER}|{CHARACTER}{CHARACTER}+
 
 %%
 
-<YYINITIAL> {CHARACTER}+                          { yybegin(YYINITIAL); return FishTypes.COMMAND; }
-<YYINITIAL> {SEPARATOR}                           { yybegin(WAITING_ARGS); return TokenType.WHITE_SPACE; }
+<YYINITIAL> {CHARACTER}+                                       { yybegin(YYINITIAL); return FishTypes.COMMAND; }
+<YYINITIAL> {SEPARATOR}                                        { yybegin(WAITING_ARGS); return TokenType.WHITE_SPACE; }
 
-<WAITING_ARGS> {WHITE_SPACE}+                     { yybegin(WAITING_ARGS); return TokenType.WHITE_SPACE; }
-<WAITING_ARGS> {SINGLE_QUOTE}                     { yybegin(WAITING_SINGLE_QUOTE_STRING); return FishTypes.QUOTE; }
-<WAITING_ARGS> {DOUBLE_QUOTE}                     { yybegin(WAITING_DOUBLE_QUOTE_STRING); return FishTypes.QUOTE; }
-<WAITING_ARGS> {ARG}                              { yybegin(WAITING_ARGS); return FishTypes.ARG; }
-<WAITING_ARGS> {REDIRECT}                         { yybegin(WAITING_REDIRECT_FILE); return FishTypes.REDIRECT; }
-<WAITING_ARGS> {CRLF}                             { yybegin(YYINITIAL); return TokenType.WHITE_SPACE; }
+<WAITING_ARGS> {WHITE_SPACE}+                                  { yybegin(WAITING_ARGS); return TokenType.WHITE_SPACE; }
+<WAITING_ARGS> {SINGLE_QUOTE}                                  { yybegin(WAITING_SINGLE_QUOTE_STRING); return FishTypes.QUOTE; }
+<WAITING_ARGS> {DOUBLE_QUOTE}                                  { yybegin(WAITING_DOUBLE_QUOTE_STRING); return FishTypes.QUOTE; }
+<WAITING_ARGS> {ARG}                                           { yybegin(WAITING_ARGS); return FishTypes.ARG; }
+<WAITING_ARGS> {REDIRECT}                                      { yybegin(WAITING_REDIRECT_FILE); return FishTypes.REDIRECT; }
+<WAITING_ARGS> {CRLF}                                          { yybegin(YYINITIAL); return TokenType.WHITE_SPACE; }
 
-<WAITING_SINGLE_QUOTE_STRING> {SINGLE_QUOTE}      { yybegin(WAITING_ARGS); return FishTypes.QUOTE; }
-<WAITING_SINGLE_QUOTE_STRING> {STRING_CHARACTER}+ { yybegin(WAITING_SINGLE_QUOTE_STRING); return FishTypes.STRING_CHARACTERS; }
+<WAITING_SINGLE_QUOTE_STRING> {SINGLE_QUOTE}                   { yybegin(WAITING_ARGS); return FishTypes.QUOTE; }
+<WAITING_SINGLE_QUOTE_STRING> {SINGLE_QUOTE_ESCAPE_SEQUENCE}   { yybegin(WAITING_SINGLE_QUOTE_STRING); return FishTypes.ESCAPE_CHARACTERS; }
+<WAITING_SINGLE_QUOTE_STRING> {SINGLE_QUOTE_STRING_CHARACTER}+ { yybegin(WAITING_SINGLE_QUOTE_STRING); return FishTypes.STRING_CHARACTERS; }
 
-<WAITING_DOUBLE_QUOTE_STRING> {DOUBLE_QUOTE}      { yybegin(WAITING_ARGS); return FishTypes.QUOTE; }
-<WAITING_DOUBLE_QUOTE_STRING> {STRING_CHARACTER}+ { yybegin(WAITING_DOUBLE_QUOTE_STRING); return FishTypes.STRING_CHARACTERS; }
+<WAITING_DOUBLE_QUOTE_STRING> {DOUBLE_QUOTE}                   { yybegin(WAITING_ARGS); return FishTypes.QUOTE; }
+<WAITING_DOUBLE_QUOTE_STRING> {STRING_CHARACTER}+              { yybegin(WAITING_DOUBLE_QUOTE_STRING); return FishTypes.STRING_CHARACTERS; }
 
-<WAITING_REDIRECT_FILE> {REDIRECT_FILE}           { yybegin(WAITING_REDIRECT_FILE); return FishTypes.REDIRECT_FILE; }
-<WAITING_REDIRECT_FILE> {WHITE_SPACE}             { yybegin(WAITING_REDIRECT_FILE); return TokenType.WHITE_SPACE; }
-<WAITING_REDIRECT_FILE> {CRLF}                    { yybegin(YYINITIAL); return TokenType.WHITE_SPACE; }
+<WAITING_REDIRECT_FILE> {REDIRECT_FILE}                        { yybegin(WAITING_REDIRECT_FILE); return FishTypes.REDIRECT_FILE; }
+<WAITING_REDIRECT_FILE> {WHITE_SPACE}                          { yybegin(WAITING_REDIRECT_FILE); return TokenType.WHITE_SPACE; }
+<WAITING_REDIRECT_FILE> {CRLF}                                 { yybegin(YYINITIAL); return TokenType.WHITE_SPACE; }
 
-{CRLF}+                                           { yybegin(YYINITIAL); return TokenType.WHITE_SPACE; }
+{CRLF}+                                                        { yybegin(YYINITIAL); return TokenType.WHITE_SPACE; }
 
-[^]                                               { return TokenType.BAD_CHARACTER; }
+[^]                                                            { return TokenType.BAD_CHARACTER; }

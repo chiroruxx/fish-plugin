@@ -113,14 +113,36 @@ public class FishParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // QUOTE STRING_CHARACTERS QUOTE
+  // QUOTE (STRING_CHARACTERS|ESCAPE_CHARACTERS)* QUOTE
   public static boolean string(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "string")) return false;
     if (!nextTokenIs(b, QUOTE)) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = consumeTokens(b, 0, QUOTE, STRING_CHARACTERS, QUOTE);
+    r = consumeToken(b, QUOTE);
+    r = r && string_1(b, l + 1);
+    r = r && consumeToken(b, QUOTE);
     exit_section_(b, m, STRING, r);
+    return r;
+  }
+
+  // (STRING_CHARACTERS|ESCAPE_CHARACTERS)*
+  private static boolean string_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "string_1")) return false;
+    while (true) {
+      int c = current_position_(b);
+      if (!string_1_0(b, l + 1)) break;
+      if (!empty_element_parsed_guard_(b, "string_1", c)) break;
+    }
+    return true;
+  }
+
+  // STRING_CHARACTERS|ESCAPE_CHARACTERS
+  private static boolean string_1_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "string_1_0")) return false;
+    boolean r;
+    r = consumeToken(b, STRING_CHARACTERS);
+    if (!r) r = consumeToken(b, ESCAPE_CHARACTERS);
     return r;
   }
 
