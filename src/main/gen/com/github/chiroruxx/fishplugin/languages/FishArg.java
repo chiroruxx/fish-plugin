@@ -5,12 +5,6 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface FishArgs extends PsiElement {
-
-  @NotNull
-  List<FishArg> getArgList();
-
-  @NotNull
-  List<FishString> getStringList();
+public interface FishArg extends PsiElement {
 
 }

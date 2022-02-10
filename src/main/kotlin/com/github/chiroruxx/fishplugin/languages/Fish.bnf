@@ -19,5 +19,6 @@ fishFile ::= item_*
 private item_ ::= (sentence|CRLF)
 
 sentence ::= COMMAND [args] [REDIRECT REDIRECT_FILE]
-args ::= (ARG|string)+
+args ::= (arg|string)+
+arg ::= (CHARACTERS|ESCAPE_CHARACTERS)+
 string ::= QUOTE (STRING_CHARACTERS|ESCAPE_CHARACTERS)* QUOTE

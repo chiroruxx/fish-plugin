@@ -7,6 +7,10 @@ import com.intellij.psi.PsiElement;
 
 public class FishVisitor extends PsiElementVisitor {
 
+  public void visitArg(@NotNull FishArg o) {
+    visitPsiElement(o);
+  }
+
   public void visitArgs(@NotNull FishArgs o) {
     visitPsiElement(o);
   }

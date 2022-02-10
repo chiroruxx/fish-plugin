@@ -18,7 +18,8 @@ import com.intellij.psi.TokenType;
 
 CRLF=\R
 WHITE_SPACE=[\ \t\f]
-CHARACTER=[^'\"\ \n\f\\] | "\\"{CRLF} | "\\".
+CHARACTER=[^'\"\ \n\f\\] | "\\"{CRLF} | "\\"[^abefnrtv\ \$\\\*\?\~\%\#\(\)\{\}\[\]\<\>\^\&\;\"\']
+ESCAPE_SEQUENCE="\\"[abefnrtv\ \$\\\*\?\~\%\#\(\)\{\}\[\]\<\>\^\&\;\"\']
 
 SEPARATOR={WHITE_SPACE}+
 SINGLE_QUOTE="'"
@@ -31,7 +32,7 @@ DOUBLE_QUOTE_ESCAPE_SEQUENCE="\\"[\"\$\\\n]
 REDIRECT=[<>]
 REDIRECT_FILE={CHARACTER}+
 ARG_ONE_CHARACTER=[^'<>\ \n\f\\]
-ARG={ARG_ONE_CHARACTER}|{CHARACTER}{CHARACTER}+
+ARG_CHARACTERS={ARG_ONE_CHARACTER}|{CHARACTER}{CHARACTER}+
 
 %state WAITING_ARGS
 %state WAITING_SINGLE_QUOTE_STRING
@@ -46,7 +47,8 @@ ARG={ARG_ONE_CHARACTER}|{CHARACTER}{CHARACTER}+
 <WAITING_ARGS> {WHITE_SPACE}+                                  { yybegin(WAITING_ARGS); return TokenType.WHITE_SPACE; }
 <WAITING_ARGS> {SINGLE_QUOTE}                                  { yybegin(WAITING_SINGLE_QUOTE_STRING); return FishTypes.QUOTE; }
 <WAITING_ARGS> {DOUBLE_QUOTE}                                  { yybegin(WAITING_DOUBLE_QUOTE_STRING); return FishTypes.QUOTE; }
-<WAITING_ARGS> {ARG}                                           { yybegin(WAITING_ARGS); return FishTypes.ARG; }
+<WAITING_ARGS> {ARG_CHARACTERS}                                { yybegin(WAITING_ARGS); return FishTypes.CHARACTERS; }
+<WAITING_ARGS> {ESCAPE_SEQUENCE}                               { yybegin(WAITING_ARGS); return FishTypes.ESCAPE_CHARACTERS; }
 <WAITING_ARGS> {REDIRECT}                                      { yybegin(WAITING_REDIRECT_FILE); return FishTypes.REDIRECT; }
 <WAITING_ARGS> {CRLF}                                          { yybegin(YYINITIAL); return TokenType.WHITE_SPACE; }
 

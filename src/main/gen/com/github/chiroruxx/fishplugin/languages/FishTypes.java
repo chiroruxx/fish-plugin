@@ -8,11 +8,12 @@ import com.github.chiroruxx.fishplugin.languages.impl.*;
 
 public interface FishTypes {
 
+  IElementType ARG = new FishElementType("ARG");
   IElementType ARGS = new FishElementType("ARGS");
   IElementType SENTENCE = new FishElementType("SENTENCE");
   IElementType STRING = new FishElementType("STRING");
 
-  IElementType ARG = new FishTokenType("ARG");
+  IElementType CHARACTERS = new FishTokenType("CHARACTERS");
   IElementType COMMAND = new FishTokenType("COMMAND");
   IElementType CRLF = new FishTokenType("CRLF");
   IElementType ESCAPE_CHARACTERS = new FishTokenType("ESCAPE_CHARACTERS");
@@ -24,7 +25,10 @@ public interface FishTypes {
   class Factory {
     public static PsiElement createElement(ASTNode node) {
       IElementType type = node.getElementType();
-      if (type == ARGS) {
+      if (type == ARG) {
+        return new FishArgImpl(node);
+      }
+      else if (type == ARGS) {
         return new FishArgsImpl(node);
       }
       else if (type == SENTENCE) {

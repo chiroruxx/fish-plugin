@@ -36,10 +36,35 @@ public class FishParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // (ARG|string)+
+  // (CHARACTERS|ESCAPE_CHARACTERS)+
+  public static boolean arg(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "arg")) return false;
+    if (!nextTokenIs(b, "<arg>", CHARACTERS, ESCAPE_CHARACTERS)) return false;
+    boolean r;
+    Marker m = enter_section_(b, l, _NONE_, ARG, "<arg>");
+    r = arg_0(b, l + 1);
+    while (r) {
+      int c = current_position_(b);
+      if (!arg_0(b, l + 1)) break;
+      if (!empty_element_parsed_guard_(b, "arg", c)) break;
+    }
+    exit_section_(b, l, m, r, false, null);
+    return r;
+  }
+
+  // CHARACTERS|ESCAPE_CHARACTERS
+  private static boolean arg_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "arg_0")) return false;
+    boolean r;
+    r = consumeToken(b, CHARACTERS);
+    if (!r) r = consumeToken(b, ESCAPE_CHARACTERS);
+    return r;
+  }
+
+  /* ********************************************************** */
+  // (arg|string)+
   public static boolean args(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "args")) return false;
-    if (!nextTokenIs(b, "<args>", ARG, QUOTE)) return false;
     boolean r;
     Marker m = enter_section_(b, l, _NONE_, ARGS, "<args>");
     r = args_0(b, l + 1);
@@ -52,11 +77,11 @@ public class FishParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // ARG|string
+  // arg|string
   private static boolean args_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "args_0")) return false;
     boolean r;
-    r = consumeToken(b, ARG);
+    r = arg(b, l + 1);
     if (!r) r = string(b, l + 1);
     return r;
   }
