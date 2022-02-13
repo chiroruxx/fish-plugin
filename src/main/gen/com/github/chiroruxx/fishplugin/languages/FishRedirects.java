@@ -7,4 +7,7 @@ import com.intellij.psi.PsiElement;
 
 public interface FishRedirects extends PsiElement {
 
+  @NotNull
+  List<FishRedirect> getRedirectList();
+
 }

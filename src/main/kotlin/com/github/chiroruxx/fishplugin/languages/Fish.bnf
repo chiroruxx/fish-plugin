@@ -18,8 +18,13 @@ fishFile ::= item_*
 
 private item_ ::= (sentence|CRLF)
 
-sentence ::= COMMAND [args] [redirects*]
+sentence ::= COMMAND [args] [redirects]
+
 args ::= (arg|string)+
 arg ::= (CHARACTERS|ESCAPE_CHARACTERS)+
+
 string ::= QUOTE (STRING_CHARACTERS|ESCAPE_CHARACTERS)* QUOTE
-redirects ::= REDIRECT_SYMBOLE REDIRECT_FILE
+
+redirects ::= redirect+
+redirect ::= REDIRECT_SYMBOLE destination
+destination ::= REDIRECT_FILE|(FILE_DESCRIPTOR_SYMBOLE FILE_DESCRIPTOR)

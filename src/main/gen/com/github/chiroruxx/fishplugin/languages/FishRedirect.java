@@ -5,12 +5,9 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface FishSentence extends PsiElement {
+public interface FishRedirect extends PsiElement {
 
-  @Nullable
-  FishArgs getArgs();
-
-  @Nullable
-  FishRedirects getRedirects();
+  @NotNull
+  FishDestination getDestination();
 
 }

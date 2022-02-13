@@ -18,7 +18,7 @@ import com.intellij.psi.TokenType;
 
 CRLF=\R
 WHITE_SPACE=[\ \t\f]
-CHARACTER=[^'<>\"\ \n\f\\] | "\\"{CRLF} | "\\"[^abefnrtv\ \$\\\*\?\~\%\#\(\)\{\}\[\]\<\>\^\&\;\"\']
+CHARACTER=[^ \$\\\*\?\~\%\#\(\)\{\}\[\]\<\>\^\&\;\"\'\n\f\\] | "\\"{CRLF} | "\\"[^abefnrtv\ \$\\\*\?\~\%\#\(\)\{\}\[\]\<\>\^\&\;\"\']
 ESCAPE_SEQUENCE="\\"[abefnrtv\ \$\\\*\?\~\%\#\(\)\{\}\[\]\<\>\^\&\;\"\']
 
 SEPARATOR={WHITE_SPACE}+
@@ -30,15 +30,19 @@ DOUBLE_QUOTE_STRING_CHARACTER=[^\"\n\\] | "\\"[^\"\$\\\n]
 DOUBLE_QUOTE_ESCAPE_SEQUENCE="\\"[\"\$\\\n]
 
 REDIRECT_INPUT_SYMBOLE=<
-REDIRECT_SYMBOLE=>
+REDIRECT_OUTPUT_SYMBOLE=([>\^]\??) | >> | \^\^
 REDIRECT_FILE={CHARACTER}+
+FILE_DESCRIPTOR_SYMBOLE=\&
+FILE_DESCRIPTOR=[012-]
 
 ARG_CHARACTERS={CHARACTER}+
 
 %state WAITING_ARGS
 %state WAITING_SINGLE_QUOTE_STRING
 %state WAITING_DOUBLE_QUOTE_STRING
+%state WAITING_REDIRECT_DESTINATION
 %state WAITING_REDIRECT_FILE
+%state WAITING_REDIRECT_FILE_DESCRIPTOR
 %state WAITING_REDIRECTS
 
 %%
@@ -52,7 +56,7 @@ ARG_CHARACTERS={CHARACTER}+
 <WAITING_ARGS> {ARG_CHARACTERS}                                { yybegin(WAITING_ARGS); return FishTypes.CHARACTERS; }
 <WAITING_ARGS> {ESCAPE_SEQUENCE}                               { yybegin(WAITING_ARGS); return FishTypes.ESCAPE_CHARACTERS; }
 <WAITING_ARGS> {REDIRECT_INPUT_SYMBOLE}                        { yybegin(WAITING_REDIRECT_FILE); return FishTypes.REDIRECT_SYMBOLE; }
-<WAITING_ARGS> {REDIRECT_SYMBOLE}                              { yybegin(WAITING_REDIRECT_FILE); return FishTypes.REDIRECT_SYMBOLE; }
+<WAITING_ARGS> {REDIRECT_OUTPUT_SYMBOLE}                       { yybegin(WAITING_REDIRECT_DESTINATION); return FishTypes.REDIRECT_SYMBOLE; }
 <WAITING_ARGS> {CRLF}                                          { yybegin(YYINITIAL); return TokenType.WHITE_SPACE; }
 
 <WAITING_SINGLE_QUOTE_STRING> {SINGLE_QUOTE}                   { yybegin(WAITING_ARGS); return FishTypes.QUOTE; }
@@ -66,8 +70,14 @@ ARG_CHARACTERS={CHARACTER}+
 <WAITING_REDIRECT_FILE> {REDIRECT_FILE}                        { yybegin(WAITING_REDIRECTS); return FishTypes.REDIRECT_FILE; }
 <WAITING_REDIRECT_FILE> {WHITE_SPACE}                          { yybegin(WAITING_REDIRECT_FILE); return TokenType.WHITE_SPACE; }
 
+<WAITING_REDIRECT_DESTINATION> {FILE_DESCRIPTOR_SYMBOLE}       { yybegin(WAITING_REDIRECT_FILE_DESCRIPTOR); return FishTypes.FILE_DESCRIPTOR_SYMBOLE; }
+<WAITING_REDIRECT_DESTINATION> {REDIRECT_FILE}                 { yybegin(WAITING_REDIRECTS); return FishTypes.REDIRECT_FILE; }
+<WAITING_REDIRECT_DESTINATION> {WHITE_SPACE}                   { yybegin(WAITING_REDIRECT_DESTINATION); return TokenType.WHITE_SPACE; }
+
+<WAITING_REDIRECT_FILE_DESCRIPTOR> {FILE_DESCRIPTOR}           { yybegin(WAITING_REDIRECTS); return FishTypes.FILE_DESCRIPTOR; }
+
 <WAITING_REDIRECTS> {REDIRECT_INPUT_SYMBOLE}                   { yybegin(WAITING_REDIRECT_FILE); return FishTypes.REDIRECT_SYMBOLE; }
-<WAITING_REDIRECTS> {REDIRECT_SYMBOLE}                         { yybegin(WAITING_REDIRECT_FILE); return FishTypes.REDIRECT_SYMBOLE; }
+<WAITING_REDIRECTS> {REDIRECT_OUTPUT_SYMBOLE}                  { yybegin(WAITING_REDIRECT_DESTINATION); return FishTypes.REDIRECT_SYMBOLE; }
 <WAITING_REDIRECTS> {WHITE_SPACE}                              { yybegin(WAITING_REDIRECTS); return TokenType.WHITE_SPACE; }
 <WAITING_REDIRECTS> {CRLF}                                     { yybegin(YYINITIAL); return TokenType.WHITE_SPACE; }
 

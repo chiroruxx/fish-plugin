@@ -10,6 +10,8 @@ public interface FishTypes {
 
   IElementType ARG = new FishElementType("ARG");
   IElementType ARGS = new FishElementType("ARGS");
+  IElementType DESTINATION = new FishElementType("DESTINATION");
+  IElementType REDIRECT = new FishElementType("REDIRECT");
   IElementType REDIRECTS = new FishElementType("REDIRECTS");
   IElementType SENTENCE = new FishElementType("SENTENCE");
   IElementType STRING = new FishElementType("STRING");
@@ -18,6 +20,8 @@ public interface FishTypes {
   IElementType COMMAND = new FishTokenType("COMMAND");
   IElementType CRLF = new FishTokenType("CRLF");
   IElementType ESCAPE_CHARACTERS = new FishTokenType("ESCAPE_CHARACTERS");
+  IElementType FILE_DESCRIPTOR = new FishTokenType("FILE_DESCRIPTOR");
+  IElementType FILE_DESCRIPTOR_SYMBOLE = new FishTokenType("FILE_DESCRIPTOR_SYMBOLE");
   IElementType QUOTE = new FishTokenType("QUOTE");
   IElementType REDIRECT_FILE = new FishTokenType("REDIRECT_FILE");
   IElementType REDIRECT_SYMBOLE = new FishTokenType("REDIRECT_SYMBOLE");
@@ -31,6 +35,12 @@ public interface FishTypes {
       }
       else if (type == ARGS) {
         return new FishArgsImpl(node);
+      }
+      else if (type == DESTINATION) {
+        return new FishDestinationImpl(node);
+      }
+      else if (type == REDIRECT) {
+        return new FishRedirectImpl(node);
       }
       else if (type == REDIRECTS) {
         return new FishRedirectsImpl(node);

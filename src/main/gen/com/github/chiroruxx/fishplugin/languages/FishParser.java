@@ -87,6 +87,29 @@ public class FishParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
+  // REDIRECT_FILE|(FILE_DESCRIPTOR_SYMBOLE FILE_DESCRIPTOR)
+  public static boolean destination(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "destination")) return false;
+    if (!nextTokenIs(b, "<destination>", FILE_DESCRIPTOR_SYMBOLE, REDIRECT_FILE)) return false;
+    boolean r;
+    Marker m = enter_section_(b, l, _NONE_, DESTINATION, "<destination>");
+    r = consumeToken(b, REDIRECT_FILE);
+    if (!r) r = destination_1(b, l + 1);
+    exit_section_(b, l, m, r, false, null);
+    return r;
+  }
+
+  // FILE_DESCRIPTOR_SYMBOLE FILE_DESCRIPTOR
+  private static boolean destination_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "destination_1")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeTokens(b, 0, FILE_DESCRIPTOR_SYMBOLE, FILE_DESCRIPTOR);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  /* ********************************************************** */
   // item_*
   static boolean fishFile(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "fishFile")) return false;
@@ -110,19 +133,37 @@ public class FishParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // REDIRECT_SYMBOLE REDIRECT_FILE
+  // REDIRECT_SYMBOLE destination
+  public static boolean redirect(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "redirect")) return false;
+    if (!nextTokenIs(b, REDIRECT_SYMBOLE)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, REDIRECT_SYMBOLE);
+    r = r && destination(b, l + 1);
+    exit_section_(b, m, REDIRECT, r);
+    return r;
+  }
+
+  /* ********************************************************** */
+  // redirect+
   public static boolean redirects(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "redirects")) return false;
     if (!nextTokenIs(b, REDIRECT_SYMBOLE)) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = consumeTokens(b, 0, REDIRECT_SYMBOLE, REDIRECT_FILE);
+    r = redirect(b, l + 1);
+    while (r) {
+      int c = current_position_(b);
+      if (!redirect(b, l + 1)) break;
+      if (!empty_element_parsed_guard_(b, "redirects", c)) break;
+    }
     exit_section_(b, m, REDIRECTS, r);
     return r;
   }
 
   /* ********************************************************** */
-  // COMMAND [args] [redirects*]
+  // COMMAND [args] [redirects]
   public static boolean sentence(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "sentence")) return false;
     if (!nextTokenIs(b, COMMAND)) return false;
@@ -142,21 +183,10 @@ public class FishParser implements PsiParser, LightPsiParser {
     return true;
   }
 
-  // [redirects*]
+  // [redirects]
   private static boolean sentence_2(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "sentence_2")) return false;
-    sentence_2_0(b, l + 1);
-    return true;
-  }
-
-  // redirects*
-  private static boolean sentence_2_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "sentence_2_0")) return false;
-    while (true) {
-      int c = current_position_(b);
-      if (!redirects(b, l + 1)) break;
-      if (!empty_element_parsed_guard_(b, "sentence_2_0", c)) break;
-    }
+    redirects(b, l + 1);
     return true;
   }
 

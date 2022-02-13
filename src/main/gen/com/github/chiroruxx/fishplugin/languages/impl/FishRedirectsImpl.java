@@ -27,4 +27,10 @@ public class FishRedirectsImpl extends ASTWrapperPsiElement implements FishRedir
     else super.accept(visitor);
   }
 
+  @Override
+  @NotNull
+  public List<FishRedirect> getRedirectList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, FishRedirect.class);
+  }
+
 }

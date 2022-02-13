@@ -19,7 +19,9 @@ class FishSyntaxHighlighter : SyntaxHighlighterBase() {
             FishTypes.COMMAND -> COMMAND_KEYS
             FishTypes.QUOTE -> STRING_KEYS
             FishTypes.STRING_CHARACTERS -> STRING_KEYS
-            FishTypes.REDIRECT_SYMBOLE -> REDIRECT_KEYS
+            FishTypes.REDIRECT_SYMBOLE -> REDIRECT_SYMBOL_KEYS
+            FishTypes.FILE_DESCRIPTOR_SYMBOLE -> FILE_DESCRIPTOR_SYMBOL_KEYS
+            FishTypes.FILE_DESCRIPTOR -> FILE_DESCRIPTOR_KEYS
             FishTypes.ESCAPE_CHARACTERS -> ESCAPE_SEQUENCE_KEYS
             TokenType.BAD_CHARACTER -> BAD_CHAR_KEYS
             else -> EMPTY_KEYS
@@ -31,8 +33,12 @@ class FishSyntaxHighlighter : SyntaxHighlighterBase() {
             createTextAttributesKey("FISH_COMMAND", DefaultLanguageHighlighterColors.KEYWORD)
         private val STRING: TextAttributesKey =
             createTextAttributesKey("FISH_STRING", DefaultLanguageHighlighterColors.STRING)
-        private val REDIRECT: TextAttributesKey =
+        private val REDIRECT_SYMBOL: TextAttributesKey =
             createTextAttributesKey("FISH_REDIRECT", DefaultLanguageHighlighterColors.KEYWORD)
+        private val FILE_DESCRIPTOR_SYMBOL: TextAttributesKey =
+            createTextAttributesKey("FISH_FILE_DESCRIPTOR_SYMBOL", DefaultLanguageHighlighterColors.KEYWORD)
+        private val FILE_DESCRIPTOR: TextAttributesKey =
+            createTextAttributesKey("FISH_FILE_DESCRIPTOR", DefaultLanguageHighlighterColors.NUMBER)
         private val ESCAPE_SEQUENCE: TextAttributesKey =
             createTextAttributesKey("FISH_ESCAPE_SEQUENCE", DefaultLanguageHighlighterColors.KEYWORD)
         private val BAD_CHARACTER: TextAttributesKey =
@@ -41,7 +47,9 @@ class FishSyntaxHighlighter : SyntaxHighlighterBase() {
         private val BAD_CHAR_KEYS = arrayOf(BAD_CHARACTER)
         private val COMMAND_KEYS = arrayOf(COMMAND)
         private val STRING_KEYS = arrayOf(STRING)
-        private val REDIRECT_KEYS = arrayOf(REDIRECT)
+        private val REDIRECT_SYMBOL_KEYS = arrayOf(REDIRECT_SYMBOL)
+        private val FILE_DESCRIPTOR_SYMBOL_KEYS = arrayOf(FILE_DESCRIPTOR_SYMBOL)
+        private val FILE_DESCRIPTOR_KEYS = arrayOf(FILE_DESCRIPTOR)
         private val ESCAPE_SEQUENCE_KEYS = arrayOf(ESCAPE_SEQUENCE)
         private val EMPTY_KEYS = arrayOf<TextAttributesKey>()
     }

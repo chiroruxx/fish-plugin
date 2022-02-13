@@ -27,8 +27,10 @@ class FishLexer implements FlexLexer {
   public static final int WAITING_ARGS = 2;
   public static final int WAITING_SINGLE_QUOTE_STRING = 4;
   public static final int WAITING_DOUBLE_QUOTE_STRING = 6;
-  public static final int WAITING_REDIRECT_FILE = 8;
-  public static final int WAITING_REDIRECTS = 10;
+  public static final int WAITING_REDIRECT_DESTINATION = 8;
+  public static final int WAITING_REDIRECT_FILE = 10;
+  public static final int WAITING_REDIRECT_FILE_DESCRIPTOR = 12;
+  public static final int WAITING_REDIRECTS = 14;
 
   /**
    * ZZ_LEXSTATE[l] is the state in the DFA for the lexical state l
@@ -37,7 +39,7 @@ class FishLexer implements FlexLexer {
    * l is of the form l = 2*k, k a non negative integer
    */
   private static final int ZZ_LEXSTATE[] = { 
-     0,  0,  1,  1,  2,  2,  3,  3,  4,  4,  5, 5
+     0,  0,  1,  1,  2,  2,  3,  3,  4,  4,  5,  5,  6,  6,  7, 7
   };
 
   /** 
@@ -59,9 +61,10 @@ class FishLexer implements FlexLexer {
 
   /* The ZZ_CMAP_A table has 320 entries */
   static final char ZZ_CMAP_A[] = zzUnpackCMap(
-    "\11\0\1\4\1\2\1\1\1\5\1\3\22\0\1\7\1\0\1\13\1\11\1\14\2\11\1\12\3\11\20\0"+
-    "\1\11\1\6\1\0\1\6\1\11\33\0\1\11\1\10\2\11\2\0\2\11\2\0\2\11\7\0\1\11\3\0"+
-    "\1\11\1\0\1\11\1\0\1\11\4\0\1\11\1\0\2\11\6\0\1\1\242\0\2\1\26\0");
+    "\11\0\1\4\1\2\1\1\1\5\1\3\22\0\1\7\1\0\1\13\1\6\1\14\1\6\1\21\1\12\3\6\2\0"+
+    "\1\22\2\0\3\22\10\0\1\6\1\15\1\0\1\20\1\17\33\0\1\6\1\10\1\6\1\16\2\0\2\11"+
+    "\2\0\2\11\7\0\1\11\3\0\1\11\1\0\1\11\1\0\1\11\4\0\1\6\1\0\2\6\6\0\1\1\242"+
+    "\0\2\1\26\0");
 
   /** 
    * Translates DFA states to action switch labels.
@@ -69,14 +72,14 @@ class FishLexer implements FlexLexer {
   private static final int [] ZZ_ACTION = zzUnpackAction();
 
   private static final String ZZ_ACTION_PACKED_0 =
-    "\6\0\2\1\1\2\1\1\1\3\1\4\1\3\1\4"+
-    "\2\5\1\3\1\6\1\4\1\7\1\10\2\11\1\4"+
-    "\1\12\2\13\1\4\2\14\2\15\1\4\2\16\1\0"+
-    "\1\1\1\0\1\5\1\17\1\0\1\20\1\0\1\21"+
-    "\1\0\1\14";
+    "\10\0\2\1\1\2\1\1\1\3\1\4\1\3\1\4"+
+    "\2\5\1\3\1\4\1\6\1\7\1\10\2\11\2\12"+
+    "\1\4\1\13\2\14\1\4\2\15\2\16\1\4\1\17"+
+    "\2\20\1\21\2\22\1\0\1\1\1\0\1\5\1\23"+
+    "\1\11\1\0\1\24\1\0\1\25\1\0\1\15";
 
   private static int [] zzUnpackAction() {
-    int [] result = new int[46];
+    int [] result = new int[55];
     int offset = 0;
     offset = zzUnpackAction(ZZ_ACTION_PACKED_0, offset, result);
     return result;
@@ -101,15 +104,16 @@ class FishLexer implements FlexLexer {
   private static final int [] ZZ_ROWMAP = zzUnpackRowMap();
 
   private static final String ZZ_ROWMAP_PACKED_0 =
-    "\0\0\0\15\0\32\0\47\0\64\0\101\0\116\0\133"+
-    "\0\150\0\165\0\202\0\217\0\234\0\251\0\266\0\303"+
-    "\0\320\0\217\0\335\0\217\0\217\0\352\0\367\0\u0104"+
-    "\0\217\0\u0111\0\u011e\0\u012b\0\u0138\0\u0145\0\150\0\217"+
-    "\0\u0152\0\217\0\150\0\251\0\u015f\0\u016c\0\u0179\0\217"+
-    "\0\u0186\0\217\0\u0193\0\217\0\u0152\0\u01a0";
+    "\0\0\0\23\0\46\0\71\0\114\0\137\0\162\0\205"+
+    "\0\230\0\253\0\276\0\321\0\344\0\367\0\u010a\0\u011d"+
+    "\0\u0130\0\u0143\0\u0156\0\u0169\0\367\0\367\0\367\0\u017c"+
+    "\0\u018f\0\u01a2\0\u01b5\0\u01c8\0\367\0\u01db\0\u01ee\0\u0201"+
+    "\0\u0214\0\u0227\0\276\0\367\0\u023a\0\367\0\276\0\367"+
+    "\0\367\0\367\0\276\0\u011d\0\u024d\0\u0260\0\u0273\0\367"+
+    "\0\367\0\u0286\0\367\0\u0299\0\367\0\u023a\0\u02ac";
 
   private static int [] zzUnpackRowMap() {
-    int [] result = new int[46];
+    int [] result = new int[55];
     int offset = 0;
     offset = zzUnpackRowMap(ZZ_ROWMAP_PACKED_0, offset, result);
     return result;
@@ -132,40 +136,45 @@ class FishLexer implements FlexLexer {
   private static final int [] ZZ_TRANS = zzUnpackTrans();
 
   private static final String ZZ_TRANS_PACKED_0 =
-    "\1\7\1\10\1\11\1\10\1\12\1\13\1\14\1\15"+
-    "\1\16\1\7\2\14\1\7\1\17\1\20\1\11\1\20"+
-    "\1\21\1\13\1\22\1\15\1\23\1\17\1\24\1\25"+
-    "\1\17\1\26\1\27\1\11\1\27\1\26\1\27\2\26"+
-    "\1\30\1\26\1\31\2\26\1\32\1\33\1\11\1\33"+
-    "\1\32\1\33\2\32\1\34\2\32\1\31\1\32\1\35"+
-    "\1\36\1\11\1\36\1\35\1\37\1\14\1\40\1\41"+
-    "\1\35\2\14\1\35\1\14\3\11\1\42\1\43\1\22"+
-    "\1\42\5\14\2\7\1\0\2\7\3\0\1\44\1\7"+
-    "\2\0\2\7\1\10\1\11\1\10\1\7\1\11\2\0"+
-    "\1\44\1\7\2\0\1\7\1\0\3\11\1\0\1\11"+
-    "\7\0\2\7\1\0\1\7\1\12\1\15\1\0\1\15"+
-    "\1\44\1\7\2\0\1\7\1\0\3\11\1\15\1\13"+
-    "\1\0\1\15\26\0\2\15\1\0\1\15\5\0\3\7"+
-    "\1\45\2\7\7\0\2\17\1\0\2\17\3\0\1\46"+
-    "\1\17\2\0\2\17\1\20\1\11\1\20\1\17\1\11"+
-    "\2\0\1\46\1\17\2\0\3\17\1\0\1\17\1\21"+
-    "\1\15\1\0\1\15\1\46\1\17\2\0\4\17\1\47"+
-    "\2\17\7\50\2\26\1\0\5\26\1\51\1\26\1\0"+
-    "\3\26\1\27\1\11\1\27\1\26\1\27\2\26\1\51"+
-    "\1\26\1\0\12\26\1\52\1\26\1\52\2\26\2\32"+
-    "\1\0\5\32\1\53\2\32\1\0\2\32\1\33\1\11"+
-    "\1\33\1\32\1\33\2\32\1\53\2\32\1\0\3\32"+
-    "\1\54\5\32\1\54\2\32\2\54\2\35\1\0\2\35"+
-    "\3\0\1\55\1\35\2\0\2\35\1\36\1\11\1\36"+
-    "\1\35\1\11\2\0\1\55\1\35\2\0\4\35\1\56"+
-    "\2\35\7\0\5\7\3\0\1\44\1\7\2\0\1\7"+
-    "\3\17\1\47\2\17\7\0\5\17\3\0\1\46\1\17"+
-    "\2\0\1\17\10\26\1\0\1\26\1\0\2\26\2\32"+
-    "\1\0\5\32\1\0\2\32\2\0\5\35\3\0\1\55"+
-    "\1\35\2\0\1\35";
+    "\1\11\1\12\1\13\1\12\1\14\1\15\1\16\1\17"+
+    "\1\20\1\11\10\16\1\11\1\21\1\22\1\13\1\22"+
+    "\1\23\1\15\1\16\1\17\1\24\1\21\1\25\1\26"+
+    "\1\16\1\27\1\30\1\16\1\31\1\16\1\21\1\32"+
+    "\1\33\1\13\1\33\1\32\1\33\2\32\1\34\1\32"+
+    "\1\35\10\32\1\36\1\37\1\13\1\37\1\36\1\37"+
+    "\2\36\1\40\2\36\1\35\7\36\1\41\1\42\1\13"+
+    "\1\42\1\41\1\43\1\16\1\44\1\45\1\41\7\16"+
+    "\1\46\2\41\1\42\1\13\1\42\1\41\1\47\1\16"+
+    "\1\50\1\45\1\41\10\16\1\41\1\16\3\13\1\16"+
+    "\1\13\14\16\1\51\1\16\3\13\1\52\1\53\1\16"+
+    "\1\52\5\16\1\27\1\30\1\16\1\31\2\16\2\11"+
+    "\1\0\2\11\3\0\1\54\1\11\10\0\2\11\1\12"+
+    "\1\13\1\12\1\11\1\13\2\0\1\54\1\11\10\0"+
+    "\1\11\1\0\3\13\1\0\1\13\15\0\2\11\1\0"+
+    "\1\11\1\14\1\17\1\0\1\17\1\54\1\11\10\0"+
+    "\1\11\1\0\3\13\1\17\1\15\1\0\1\17\42\0"+
+    "\2\17\1\0\1\17\13\0\3\11\1\55\2\11\14\0"+
+    "\1\11\2\21\1\0\2\21\3\0\1\56\1\21\10\0"+
+    "\2\21\1\22\1\13\1\22\1\21\1\13\2\0\1\56"+
+    "\1\21\10\0\3\21\1\0\1\21\1\23\1\17\1\0"+
+    "\1\17\1\56\1\21\10\0\4\21\1\57\2\21\14\60"+
+    "\1\21\16\0\2\61\22\0\2\61\2\0\2\32\1\0"+
+    "\5\32\1\62\1\32\1\0\11\32\1\33\1\13\1\33"+
+    "\1\32\1\33\2\32\1\62\1\32\1\0\20\32\1\63"+
+    "\1\32\1\63\10\32\2\36\1\0\5\36\1\64\2\36"+
+    "\1\0\10\36\1\37\1\13\1\37\1\36\1\37\2\36"+
+    "\1\64\2\36\1\0\11\36\1\65\5\36\1\65\2\36"+
+    "\2\65\6\36\2\41\1\0\2\41\3\0\1\66\1\41"+
+    "\10\0\2\41\1\42\1\13\1\42\1\41\1\13\2\0"+
+    "\1\66\1\41\10\0\4\41\1\67\2\41\14\0\1\41"+
+    "\5\11\3\0\1\54\1\11\10\0\1\11\3\21\1\57"+
+    "\2\21\14\0\6\21\3\0\1\56\1\21\10\0\1\21"+
+    "\10\32\1\0\1\32\1\0\10\32\2\36\1\0\5\36"+
+    "\1\0\2\36\2\0\6\36\5\41\3\0\1\66\1\41"+
+    "\10\0\1\41";
 
   private static int [] zzUnpackTrans() {
-    int [] result = new int[429];
+    int [] result = new int[703];
     int offset = 0;
     offset = zzUnpackTrans(ZZ_TRANS_PACKED_0, offset, result);
     return result;
@@ -203,13 +212,13 @@ class FishLexer implements FlexLexer {
   private static final int [] ZZ_ATTRIBUTE = zzUnpackAttribute();
 
   private static final String ZZ_ATTRIBUTE_PACKED_0 =
-    "\6\0\5\1\1\11\5\1\1\11\1\1\2\11\3\1"+
-    "\1\11\6\1\1\11\1\1\1\11\1\1\1\0\1\1"+
-    "\1\0\1\1\1\11\1\0\1\11\1\0\1\11\1\0"+
+    "\10\0\5\1\1\11\6\1\3\11\5\1\1\11\6\1"+
+    "\1\11\1\1\1\11\1\1\3\11\1\1\1\0\1\1"+
+    "\1\0\1\1\2\11\1\0\1\11\1\0\1\11\1\0"+
     "\1\1";
 
   private static int [] zzUnpackAttribute() {
-    int [] result = new int[46];
+    int [] result = new int[55];
     int offset = 0;
     offset = zzUnpackAttribute(ZZ_ATTRIBUTE_PACKED_0, offset, result);
     return result;
@@ -526,87 +535,107 @@ class FishLexer implements FlexLexer {
             { yybegin(YYINITIAL); return FishTypes.COMMAND;
             } 
             // fall through
-          case 18: break;
+          case 22: break;
           case 2: 
             { yybegin(YYINITIAL); return TokenType.WHITE_SPACE;
             } 
             // fall through
-          case 19: break;
+          case 23: break;
           case 3: 
             { yybegin(WAITING_ARGS); return TokenType.WHITE_SPACE;
             } 
             // fall through
-          case 20: break;
+          case 24: break;
           case 4: 
             { return TokenType.BAD_CHARACTER;
             } 
             // fall through
-          case 21: break;
+          case 25: break;
           case 5: 
             { yybegin(WAITING_ARGS); return FishTypes.CHARACTERS;
             } 
             // fall through
-          case 22: break;
+          case 26: break;
           case 6: 
-            { yybegin(WAITING_REDIRECT_FILE); return FishTypes.REDIRECT_SYMBOLE;
-            } 
-            // fall through
-          case 23: break;
-          case 7: 
             { yybegin(WAITING_SINGLE_QUOTE_STRING); return FishTypes.QUOTE;
             } 
             // fall through
-          case 24: break;
-          case 8: 
+          case 27: break;
+          case 7: 
             { yybegin(WAITING_DOUBLE_QUOTE_STRING); return FishTypes.QUOTE;
             } 
             // fall through
-          case 25: break;
-          case 9: 
-            { yybegin(WAITING_SINGLE_QUOTE_STRING); return FishTypes.STRING_CHARACTERS;
-            } 
-            // fall through
-          case 26: break;
-          case 10: 
-            { yybegin(WAITING_ARGS); return FishTypes.QUOTE;
-            } 
-            // fall through
-          case 27: break;
-          case 11: 
-            { yybegin(WAITING_DOUBLE_QUOTE_STRING); return FishTypes.STRING_CHARACTERS;
-            } 
-            // fall through
           case 28: break;
-          case 12: 
-            { yybegin(WAITING_REDIRECTS); return FishTypes.REDIRECT_FILE;
+          case 8: 
+            { yybegin(WAITING_REDIRECT_FILE); return FishTypes.REDIRECT_SYMBOLE;
             } 
             // fall through
           case 29: break;
-          case 13: 
-            { yybegin(WAITING_REDIRECT_FILE); return TokenType.WHITE_SPACE;
+          case 9: 
+            { yybegin(WAITING_REDIRECT_DESTINATION); return FishTypes.REDIRECT_SYMBOLE;
             } 
             // fall through
           case 30: break;
-          case 14: 
-            { yybegin(WAITING_REDIRECTS); return TokenType.WHITE_SPACE;
+          case 10: 
+            { yybegin(WAITING_SINGLE_QUOTE_STRING); return FishTypes.STRING_CHARACTERS;
             } 
             // fall through
           case 31: break;
-          case 15: 
-            { yybegin(WAITING_ARGS); return FishTypes.ESCAPE_CHARACTERS;
+          case 11: 
+            { yybegin(WAITING_ARGS); return FishTypes.QUOTE;
             } 
             // fall through
           case 32: break;
-          case 16: 
-            { yybegin(WAITING_SINGLE_QUOTE_STRING); return FishTypes.ESCAPE_CHARACTERS;
+          case 12: 
+            { yybegin(WAITING_DOUBLE_QUOTE_STRING); return FishTypes.STRING_CHARACTERS;
             } 
             // fall through
           case 33: break;
-          case 17: 
-            { yybegin(WAITING_DOUBLE_QUOTE_STRING); return FishTypes.ESCAPE_CHARACTERS;
+          case 13: 
+            { yybegin(WAITING_REDIRECTS); return FishTypes.REDIRECT_FILE;
             } 
             // fall through
           case 34: break;
+          case 14: 
+            { yybegin(WAITING_REDIRECT_DESTINATION); return TokenType.WHITE_SPACE;
+            } 
+            // fall through
+          case 35: break;
+          case 15: 
+            { yybegin(WAITING_REDIRECT_FILE_DESCRIPTOR); return FishTypes.FILE_DESCRIPTOR_SYMBOLE;
+            } 
+            // fall through
+          case 36: break;
+          case 16: 
+            { yybegin(WAITING_REDIRECT_FILE); return TokenType.WHITE_SPACE;
+            } 
+            // fall through
+          case 37: break;
+          case 17: 
+            { yybegin(WAITING_REDIRECTS); return FishTypes.FILE_DESCRIPTOR;
+            } 
+            // fall through
+          case 38: break;
+          case 18: 
+            { yybegin(WAITING_REDIRECTS); return TokenType.WHITE_SPACE;
+            } 
+            // fall through
+          case 39: break;
+          case 19: 
+            { yybegin(WAITING_ARGS); return FishTypes.ESCAPE_CHARACTERS;
+            } 
+            // fall through
+          case 40: break;
+          case 20: 
+            { yybegin(WAITING_SINGLE_QUOTE_STRING); return FishTypes.ESCAPE_CHARACTERS;
+            } 
+            // fall through
+          case 41: break;
+          case 21: 
+            { yybegin(WAITING_DOUBLE_QUOTE_STRING); return FishTypes.ESCAPE_CHARACTERS;
+            } 
+            // fall through
+          case 42: break;
           default:
             zzScanError(ZZ_NO_MATCH);
           }

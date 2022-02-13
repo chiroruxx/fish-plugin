@@ -11,32 +11,20 @@ import static com.github.chiroruxx.fishplugin.languages.FishTypes.*;
 import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import com.github.chiroruxx.fishplugin.languages.*;
 
-public class FishSentenceImpl extends ASTWrapperPsiElement implements FishSentence {
+public class FishDestinationImpl extends ASTWrapperPsiElement implements FishDestination {
 
-  public FishSentenceImpl(@NotNull ASTNode node) {
+  public FishDestinationImpl(@NotNull ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull FishVisitor visitor) {
-    visitor.visitSentence(this);
+    visitor.visitDestination(this);
   }
 
   @Override
   public void accept(@NotNull PsiElementVisitor visitor) {
     if (visitor instanceof FishVisitor) accept((FishVisitor)visitor);
     else super.accept(visitor);
-  }
-
-  @Override
-  @Nullable
-  public FishArgs getArgs() {
-    return findChildByClass(FishArgs.class);
-  }
-
-  @Override
-  @Nullable
-  public FishRedirects getRedirects() {
-    return findChildByClass(FishRedirects.class);
   }
 
 }
