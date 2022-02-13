@@ -29,7 +29,8 @@ DOUBLE_QUOTE="\""
 DOUBLE_QUOTE_STRING_CHARACTER=[^\"\n\\] | "\\"[^\"\$\\\n]
 DOUBLE_QUOTE_ESCAPE_SEQUENCE="\\"[\"\$\\\n]
 
-REDIRECT_SYMBOLE=[<>]
+REDIRECT_INPUT_SYMBOLE=<
+REDIRECT_SYMBOLE=>
 REDIRECT_FILE={CHARACTER}+
 
 ARG_CHARACTERS={CHARACTER}+
@@ -50,6 +51,7 @@ ARG_CHARACTERS={CHARACTER}+
 <WAITING_ARGS> {DOUBLE_QUOTE}                                  { yybegin(WAITING_DOUBLE_QUOTE_STRING); return FishTypes.QUOTE; }
 <WAITING_ARGS> {ARG_CHARACTERS}                                { yybegin(WAITING_ARGS); return FishTypes.CHARACTERS; }
 <WAITING_ARGS> {ESCAPE_SEQUENCE}                               { yybegin(WAITING_ARGS); return FishTypes.ESCAPE_CHARACTERS; }
+<WAITING_ARGS> {REDIRECT_INPUT_SYMBOLE}                        { yybegin(WAITING_REDIRECT_FILE); return FishTypes.REDIRECT_SYMBOLE; }
 <WAITING_ARGS> {REDIRECT_SYMBOLE}                              { yybegin(WAITING_REDIRECT_FILE); return FishTypes.REDIRECT_SYMBOLE; }
 <WAITING_ARGS> {CRLF}                                          { yybegin(YYINITIAL); return TokenType.WHITE_SPACE; }
 
@@ -64,6 +66,7 @@ ARG_CHARACTERS={CHARACTER}+
 <WAITING_REDIRECT_FILE> {REDIRECT_FILE}                        { yybegin(WAITING_REDIRECTS); return FishTypes.REDIRECT_FILE; }
 <WAITING_REDIRECT_FILE> {WHITE_SPACE}                          { yybegin(WAITING_REDIRECT_FILE); return TokenType.WHITE_SPACE; }
 
+<WAITING_REDIRECTS> {REDIRECT_INPUT_SYMBOLE}                   { yybegin(WAITING_REDIRECT_FILE); return FishTypes.REDIRECT_SYMBOLE; }
 <WAITING_REDIRECTS> {REDIRECT_SYMBOLE}                         { yybegin(WAITING_REDIRECT_FILE); return FishTypes.REDIRECT_SYMBOLE; }
 <WAITING_REDIRECTS> {WHITE_SPACE}                              { yybegin(WAITING_REDIRECTS); return TokenType.WHITE_SPACE; }
 <WAITING_REDIRECTS> {CRLF}                                     { yybegin(YYINITIAL); return TokenType.WHITE_SPACE; }
