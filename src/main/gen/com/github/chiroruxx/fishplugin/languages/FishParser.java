@@ -110,7 +110,19 @@ public class FishParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // COMMAND [args] [REDIRECT REDIRECT_FILE]
+  // REDIRECT_SYMBOLE REDIRECT_FILE
+  public static boolean redirects(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "redirects")) return false;
+    if (!nextTokenIs(b, REDIRECT_SYMBOLE)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeTokens(b, 0, REDIRECT_SYMBOLE, REDIRECT_FILE);
+    exit_section_(b, m, REDIRECTS, r);
+    return r;
+  }
+
+  /* ********************************************************** */
+  // COMMAND [args] [redirects*]
   public static boolean sentence(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "sentence")) return false;
     if (!nextTokenIs(b, COMMAND)) return false;
@@ -130,10 +142,21 @@ public class FishParser implements PsiParser, LightPsiParser {
     return true;
   }
 
-  // [REDIRECT REDIRECT_FILE]
+  // [redirects*]
   private static boolean sentence_2(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "sentence_2")) return false;
-    parseTokens(b, 0, REDIRECT, REDIRECT_FILE);
+    sentence_2_0(b, l + 1);
+    return true;
+  }
+
+  // redirects*
+  private static boolean sentence_2_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "sentence_2_0")) return false;
+    while (true) {
+      int c = current_position_(b);
+      if (!redirects(b, l + 1)) break;
+      if (!empty_element_parsed_guard_(b, "sentence_2_0", c)) break;
+    }
     return true;
   }
 

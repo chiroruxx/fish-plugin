@@ -10,6 +10,7 @@ public interface FishTypes {
 
   IElementType ARG = new FishElementType("ARG");
   IElementType ARGS = new FishElementType("ARGS");
+  IElementType REDIRECTS = new FishElementType("REDIRECTS");
   IElementType SENTENCE = new FishElementType("SENTENCE");
   IElementType STRING = new FishElementType("STRING");
 
@@ -18,8 +19,8 @@ public interface FishTypes {
   IElementType CRLF = new FishTokenType("CRLF");
   IElementType ESCAPE_CHARACTERS = new FishTokenType("ESCAPE_CHARACTERS");
   IElementType QUOTE = new FishTokenType("QUOTE");
-  IElementType REDIRECT = new FishTokenType("REDIRECT");
   IElementType REDIRECT_FILE = new FishTokenType("REDIRECT_FILE");
+  IElementType REDIRECT_SYMBOLE = new FishTokenType("REDIRECT_SYMBOLE");
   IElementType STRING_CHARACTERS = new FishTokenType("STRING_CHARACTERS");
 
   class Factory {
@@ -30,6 +31,9 @@ public interface FishTypes {
       }
       else if (type == ARGS) {
         return new FishArgsImpl(node);
+      }
+      else if (type == REDIRECTS) {
+        return new FishRedirectsImpl(node);
       }
       else if (type == SENTENCE) {
         return new FishSentenceImpl(node);

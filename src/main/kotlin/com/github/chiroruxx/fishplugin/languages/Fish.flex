@@ -18,7 +18,7 @@ import com.intellij.psi.TokenType;
 
 CRLF=\R
 WHITE_SPACE=[\ \t\f]
-CHARACTER=[^'\"\ \n\f\\] | "\\"{CRLF} | "\\"[^abefnrtv\ \$\\\*\?\~\%\#\(\)\{\}\[\]\<\>\^\&\;\"\']
+CHARACTER=[^'<>\"\ \n\f\\] | "\\"{CRLF} | "\\"[^abefnrtv\ \$\\\*\?\~\%\#\(\)\{\}\[\]\<\>\^\&\;\"\']
 ESCAPE_SEQUENCE="\\"[abefnrtv\ \$\\\*\?\~\%\#\(\)\{\}\[\]\<\>\^\&\;\"\']
 
 SEPARATOR={WHITE_SPACE}+
@@ -29,15 +29,16 @@ DOUBLE_QUOTE="\""
 DOUBLE_QUOTE_STRING_CHARACTER=[^\"\n\\] | "\\"[^\"\$\\\n]
 DOUBLE_QUOTE_ESCAPE_SEQUENCE="\\"[\"\$\\\n]
 
-REDIRECT=[<>]
+REDIRECT_SYMBOLE=[<>]
 REDIRECT_FILE={CHARACTER}+
-ARG_ONE_CHARACTER=[^'<>\ \n\f\\]
-ARG_CHARACTERS={ARG_ONE_CHARACTER}|{CHARACTER}{CHARACTER}+
+
+ARG_CHARACTERS={CHARACTER}+
 
 %state WAITING_ARGS
 %state WAITING_SINGLE_QUOTE_STRING
 %state WAITING_DOUBLE_QUOTE_STRING
 %state WAITING_REDIRECT_FILE
+%state WAITING_REDIRECTS
 
 %%
 
@@ -49,7 +50,7 @@ ARG_CHARACTERS={ARG_ONE_CHARACTER}|{CHARACTER}{CHARACTER}+
 <WAITING_ARGS> {DOUBLE_QUOTE}                                  { yybegin(WAITING_DOUBLE_QUOTE_STRING); return FishTypes.QUOTE; }
 <WAITING_ARGS> {ARG_CHARACTERS}                                { yybegin(WAITING_ARGS); return FishTypes.CHARACTERS; }
 <WAITING_ARGS> {ESCAPE_SEQUENCE}                               { yybegin(WAITING_ARGS); return FishTypes.ESCAPE_CHARACTERS; }
-<WAITING_ARGS> {REDIRECT}                                      { yybegin(WAITING_REDIRECT_FILE); return FishTypes.REDIRECT; }
+<WAITING_ARGS> {REDIRECT_SYMBOLE}                              { yybegin(WAITING_REDIRECT_FILE); return FishTypes.REDIRECT_SYMBOLE; }
 <WAITING_ARGS> {CRLF}                                          { yybegin(YYINITIAL); return TokenType.WHITE_SPACE; }
 
 <WAITING_SINGLE_QUOTE_STRING> {SINGLE_QUOTE}                   { yybegin(WAITING_ARGS); return FishTypes.QUOTE; }
@@ -60,9 +61,12 @@ ARG_CHARACTERS={ARG_ONE_CHARACTER}|{CHARACTER}{CHARACTER}+
 <WAITING_DOUBLE_QUOTE_STRING> {DOUBLE_QUOTE_ESCAPE_SEQUENCE}   { yybegin(WAITING_DOUBLE_QUOTE_STRING); return FishTypes.ESCAPE_CHARACTERS; }
 <WAITING_DOUBLE_QUOTE_STRING> {DOUBLE_QUOTE_STRING_CHARACTER}+ { yybegin(WAITING_DOUBLE_QUOTE_STRING); return FishTypes.STRING_CHARACTERS; }
 
-<WAITING_REDIRECT_FILE> {REDIRECT_FILE}                        { yybegin(WAITING_REDIRECT_FILE); return FishTypes.REDIRECT_FILE; }
+<WAITING_REDIRECT_FILE> {REDIRECT_FILE}                        { yybegin(WAITING_REDIRECTS); return FishTypes.REDIRECT_FILE; }
 <WAITING_REDIRECT_FILE> {WHITE_SPACE}                          { yybegin(WAITING_REDIRECT_FILE); return TokenType.WHITE_SPACE; }
-<WAITING_REDIRECT_FILE> {CRLF}                                 { yybegin(YYINITIAL); return TokenType.WHITE_SPACE; }
+
+<WAITING_REDIRECTS> {REDIRECT_SYMBOLE}                         { yybegin(WAITING_REDIRECT_FILE); return FishTypes.REDIRECT_SYMBOLE; }
+<WAITING_REDIRECTS> {WHITE_SPACE}                              { yybegin(WAITING_REDIRECTS); return TokenType.WHITE_SPACE; }
+<WAITING_REDIRECTS> {CRLF}                                     { yybegin(YYINITIAL); return TokenType.WHITE_SPACE; }
 
 {CRLF}+                                                        { yybegin(YYINITIAL); return TokenType.WHITE_SPACE; }
 

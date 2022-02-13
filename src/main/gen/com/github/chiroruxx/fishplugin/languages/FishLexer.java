@@ -28,6 +28,7 @@ class FishLexer implements FlexLexer {
   public static final int WAITING_SINGLE_QUOTE_STRING = 4;
   public static final int WAITING_DOUBLE_QUOTE_STRING = 6;
   public static final int WAITING_REDIRECT_FILE = 8;
+  public static final int WAITING_REDIRECTS = 10;
 
   /**
    * ZZ_LEXSTATE[l] is the state in the DFA for the lexical state l
@@ -36,7 +37,7 @@ class FishLexer implements FlexLexer {
    * l is of the form l = 2*k, k a non negative integer
    */
   private static final int ZZ_LEXSTATE[] = { 
-     0,  0,  1,  1,  2,  2,  3,  3,  4, 4
+     0,  0,  1,  1,  2,  2,  3,  3,  4,  4,  5, 5
   };
 
   /** 
@@ -58,8 +59,8 @@ class FishLexer implements FlexLexer {
 
   /* The ZZ_CMAP_A table has 320 entries */
   static final char ZZ_CMAP_A[] = zzUnpackCMap(
-    "\11\0\1\4\1\2\1\1\1\5\1\3\22\0\1\7\1\0\1\6\1\11\1\13\2\11\1\12\3\11\20\0\1"+
-    "\11\1\14\1\0\1\14\1\11\33\0\1\11\1\10\2\11\2\0\2\11\2\0\2\11\7\0\1\11\3\0"+
+    "\11\0\1\4\1\2\1\1\1\5\1\3\22\0\1\7\1\0\1\13\1\11\1\14\2\11\1\12\3\11\20\0"+
+    "\1\11\1\6\1\0\1\6\1\11\33\0\1\11\1\10\2\11\2\0\2\11\2\0\2\11\7\0\1\11\3\0"+
     "\1\11\1\0\1\11\1\0\1\11\4\0\1\11\1\0\2\11\6\0\1\1\242\0\2\1\26\0");
 
   /** 
@@ -68,14 +69,14 @@ class FishLexer implements FlexLexer {
   private static final int [] ZZ_ACTION = zzUnpackAction();
 
   private static final String ZZ_ACTION_PACKED_0 =
-    "\5\0\2\1\1\2\1\1\1\3\1\4\1\3\1\4"+
+    "\6\0\2\1\1\2\1\1\1\3\1\4\1\3\1\4"+
     "\2\5\1\3\1\6\1\4\1\7\1\10\2\11\1\4"+
-    "\1\12\2\13\1\4\2\14\2\15\1\4\1\0\1\1"+
-    "\3\0\1\16\1\0\1\17\1\0\1\20\1\0\1\14"+
-    "\1\5";
+    "\1\12\2\13\1\4\2\14\2\15\1\4\2\16\1\0"+
+    "\1\1\1\0\1\5\1\17\1\0\1\20\1\0\1\21"+
+    "\1\0\1\14";
 
   private static int [] zzUnpackAction() {
-    int [] result = new int[45];
+    int [] result = new int[46];
     int offset = 0;
     offset = zzUnpackAction(ZZ_ACTION_PACKED_0, offset, result);
     return result;
@@ -102,13 +103,13 @@ class FishLexer implements FlexLexer {
   private static final String ZZ_ROWMAP_PACKED_0 =
     "\0\0\0\15\0\32\0\47\0\64\0\101\0\116\0\133"+
     "\0\150\0\165\0\202\0\217\0\234\0\251\0\266\0\303"+
-    "\0\202\0\320\0\202\0\251\0\335\0\352\0\367\0\202"+
-    "\0\u0104\0\u0111\0\u011e\0\u012b\0\u0138\0\133\0\202\0\u0145"+
-    "\0\234\0\u0152\0\u015f\0\251\0\u016c\0\202\0\u0179\0\202"+
-    "\0\u0186\0\202\0\u0145\0\u0193\0\u01a0";
+    "\0\320\0\217\0\335\0\217\0\217\0\352\0\367\0\u0104"+
+    "\0\217\0\u0111\0\u011e\0\u012b\0\u0138\0\u0145\0\150\0\217"+
+    "\0\u0152\0\217\0\150\0\251\0\u015f\0\u016c\0\u0179\0\217"+
+    "\0\u0186\0\217\0\u0193\0\217\0\u0152\0\u01a0";
 
   private static int [] zzUnpackRowMap() {
-    int [] result = new int[45];
+    int [] result = new int[46];
     int offset = 0;
     offset = zzUnpackRowMap(ZZ_ROWMAP_PACKED_0, offset, result);
     return result;
@@ -131,38 +132,37 @@ class FishLexer implements FlexLexer {
   private static final int [] ZZ_TRANS = zzUnpackTrans();
 
   private static final String ZZ_TRANS_PACKED_0 =
-    "\1\6\1\7\1\10\1\7\1\11\1\12\1\13\1\14"+
-    "\1\15\1\6\1\13\2\6\1\16\1\17\1\10\1\17"+
-    "\1\20\1\12\1\21\1\14\1\22\1\16\1\23\1\16"+
-    "\1\24\1\25\1\26\1\10\1\26\1\25\1\26\2\25"+
-    "\1\27\1\25\1\30\2\25\1\31\1\32\1\10\1\32"+
-    "\1\31\1\32\1\30\1\31\1\33\4\31\1\34\1\35"+
-    "\1\10\1\35\1\34\1\36\1\13\1\37\1\40\1\34"+
-    "\1\13\2\34\2\6\1\0\2\6\3\0\1\41\1\6"+
-    "\1\0\3\6\1\7\1\10\1\7\1\6\1\10\2\0"+
-    "\1\41\1\6\1\0\2\6\1\0\3\10\1\0\1\10"+
-    "\7\0\2\6\1\0\1\6\1\11\1\14\1\0\1\14"+
-    "\1\41\1\6\1\0\2\6\1\0\3\10\1\14\1\12"+
-    "\1\0\1\14\26\0\2\14\1\0\1\14\5\0\3\6"+
-    "\1\42\2\6\7\0\2\16\1\0\2\16\3\0\1\43"+
-    "\1\16\1\0\3\16\1\17\1\10\1\17\1\16\1\10"+
-    "\2\0\1\43\1\16\1\0\4\16\1\0\1\16\1\20"+
-    "\1\14\1\0\1\14\1\43\1\16\1\0\2\16\3\44"+
-    "\1\45\2\44\7\46\2\25\1\0\5\25\1\47\1\25"+
-    "\1\0\3\25\1\26\1\10\1\26\1\25\1\26\2\25"+
-    "\1\47\1\25\1\0\12\25\1\50\1\25\1\50\2\25"+
-    "\2\31\1\0\3\31\1\0\1\31\1\51\5\31\1\32"+
-    "\1\10\1\32\1\31\1\32\1\0\1\31\1\51\6\31"+
-    "\1\52\3\31\1\52\1\31\1\52\2\31\1\52\1\31"+
-    "\2\34\1\0\2\34\3\0\1\53\1\34\1\0\3\34"+
-    "\1\35\1\10\1\35\1\34\1\10\2\0\1\53\1\34"+
-    "\1\0\5\34\1\54\2\34\7\0\5\6\3\0\1\41"+
-    "\1\6\1\0\2\6\3\16\1\55\2\16\7\0\2\16"+
-    "\1\44\2\16\3\0\1\43\1\16\1\0\2\16\10\25"+
-    "\1\0\1\25\1\0\2\25\2\31\1\0\3\31\1\0"+
-    "\1\31\1\0\2\31\1\0\1\31\5\34\3\0\1\53"+
-    "\1\34\1\0\2\34\5\16\3\0\1\43\1\16\1\0"+
-    "\2\16";
+    "\1\7\1\10\1\11\1\10\1\12\1\13\1\14\1\15"+
+    "\1\16\1\7\2\14\1\7\1\17\1\20\1\11\1\20"+
+    "\1\21\1\13\1\22\1\15\1\23\1\17\1\24\1\25"+
+    "\1\17\1\26\1\27\1\11\1\27\1\26\1\27\2\26"+
+    "\1\30\1\26\1\31\2\26\1\32\1\33\1\11\1\33"+
+    "\1\32\1\33\2\32\1\34\2\32\1\31\1\32\1\35"+
+    "\1\36\1\11\1\36\1\35\1\37\1\14\1\40\1\41"+
+    "\1\35\2\14\1\35\1\14\3\11\1\42\1\43\1\22"+
+    "\1\42\5\14\2\7\1\0\2\7\3\0\1\44\1\7"+
+    "\2\0\2\7\1\10\1\11\1\10\1\7\1\11\2\0"+
+    "\1\44\1\7\2\0\1\7\1\0\3\11\1\0\1\11"+
+    "\7\0\2\7\1\0\1\7\1\12\1\15\1\0\1\15"+
+    "\1\44\1\7\2\0\1\7\1\0\3\11\1\15\1\13"+
+    "\1\0\1\15\26\0\2\15\1\0\1\15\5\0\3\7"+
+    "\1\45\2\7\7\0\2\17\1\0\2\17\3\0\1\46"+
+    "\1\17\2\0\2\17\1\20\1\11\1\20\1\17\1\11"+
+    "\2\0\1\46\1\17\2\0\3\17\1\0\1\17\1\21"+
+    "\1\15\1\0\1\15\1\46\1\17\2\0\4\17\1\47"+
+    "\2\17\7\50\2\26\1\0\5\26\1\51\1\26\1\0"+
+    "\3\26\1\27\1\11\1\27\1\26\1\27\2\26\1\51"+
+    "\1\26\1\0\12\26\1\52\1\26\1\52\2\26\2\32"+
+    "\1\0\5\32\1\53\2\32\1\0\2\32\1\33\1\11"+
+    "\1\33\1\32\1\33\2\32\1\53\2\32\1\0\3\32"+
+    "\1\54\5\32\1\54\2\32\2\54\2\35\1\0\2\35"+
+    "\3\0\1\55\1\35\2\0\2\35\1\36\1\11\1\36"+
+    "\1\35\1\11\2\0\1\55\1\35\2\0\4\35\1\56"+
+    "\2\35\7\0\5\7\3\0\1\44\1\7\2\0\1\7"+
+    "\3\17\1\47\2\17\7\0\5\17\3\0\1\46\1\17"+
+    "\2\0\1\17\10\26\1\0\1\26\1\0\2\26\2\32"+
+    "\1\0\5\32\1\0\2\32\2\0\5\35\3\0\1\55"+
+    "\1\35\2\0\1\35";
 
   private static int [] zzUnpackTrans() {
     int [] result = new int[429];
@@ -203,12 +203,13 @@ class FishLexer implements FlexLexer {
   private static final int [] ZZ_ATTRIBUTE = zzUnpackAttribute();
 
   private static final String ZZ_ATTRIBUTE_PACKED_0 =
-    "\5\0\5\1\1\11\5\1\1\11\1\1\1\11\4\1"+
-    "\1\11\6\1\1\11\1\1\1\0\1\1\3\0\1\11"+
-    "\1\0\1\11\1\0\1\11\1\0\2\1";
+    "\6\0\5\1\1\11\5\1\1\11\1\1\2\11\3\1"+
+    "\1\11\6\1\1\11\1\1\1\11\1\1\1\0\1\1"+
+    "\1\0\1\1\1\11\1\0\1\11\1\0\1\11\1\0"+
+    "\1\1";
 
   private static int [] zzUnpackAttribute() {
-    int [] result = new int[45];
+    int [] result = new int[46];
     int offset = 0;
     offset = zzUnpackAttribute(ZZ_ATTRIBUTE_PACKED_0, offset, result);
     return result;
@@ -525,82 +526,87 @@ class FishLexer implements FlexLexer {
             { yybegin(YYINITIAL); return FishTypes.COMMAND;
             } 
             // fall through
-          case 17: break;
+          case 18: break;
           case 2: 
             { yybegin(YYINITIAL); return TokenType.WHITE_SPACE;
             } 
             // fall through
-          case 18: break;
+          case 19: break;
           case 3: 
             { yybegin(WAITING_ARGS); return TokenType.WHITE_SPACE;
             } 
             // fall through
-          case 19: break;
+          case 20: break;
           case 4: 
             { return TokenType.BAD_CHARACTER;
             } 
             // fall through
-          case 20: break;
+          case 21: break;
           case 5: 
             { yybegin(WAITING_ARGS); return FishTypes.CHARACTERS;
             } 
             // fall through
-          case 21: break;
+          case 22: break;
           case 6: 
-            { yybegin(WAITING_DOUBLE_QUOTE_STRING); return FishTypes.QUOTE;
+            { yybegin(WAITING_REDIRECT_FILE); return FishTypes.REDIRECT_SYMBOLE;
             } 
             // fall through
-          case 22: break;
+          case 23: break;
           case 7: 
             { yybegin(WAITING_SINGLE_QUOTE_STRING); return FishTypes.QUOTE;
             } 
             // fall through
-          case 23: break;
+          case 24: break;
           case 8: 
-            { yybegin(WAITING_REDIRECT_FILE); return FishTypes.REDIRECT;
+            { yybegin(WAITING_DOUBLE_QUOTE_STRING); return FishTypes.QUOTE;
             } 
             // fall through
-          case 24: break;
+          case 25: break;
           case 9: 
             { yybegin(WAITING_SINGLE_QUOTE_STRING); return FishTypes.STRING_CHARACTERS;
             } 
             // fall through
-          case 25: break;
+          case 26: break;
           case 10: 
             { yybegin(WAITING_ARGS); return FishTypes.QUOTE;
             } 
             // fall through
-          case 26: break;
+          case 27: break;
           case 11: 
             { yybegin(WAITING_DOUBLE_QUOTE_STRING); return FishTypes.STRING_CHARACTERS;
             } 
             // fall through
-          case 27: break;
+          case 28: break;
           case 12: 
-            { yybegin(WAITING_REDIRECT_FILE); return FishTypes.REDIRECT_FILE;
+            { yybegin(WAITING_REDIRECTS); return FishTypes.REDIRECT_FILE;
             } 
             // fall through
-          case 28: break;
+          case 29: break;
           case 13: 
             { yybegin(WAITING_REDIRECT_FILE); return TokenType.WHITE_SPACE;
             } 
             // fall through
-          case 29: break;
-          case 14: 
-            { yybegin(WAITING_ARGS); return FishTypes.ESCAPE_CHARACTERS;
-            } 
-            // fall through
           case 30: break;
-          case 15: 
-            { yybegin(WAITING_SINGLE_QUOTE_STRING); return FishTypes.ESCAPE_CHARACTERS;
+          case 14: 
+            { yybegin(WAITING_REDIRECTS); return TokenType.WHITE_SPACE;
             } 
             // fall through
           case 31: break;
-          case 16: 
-            { yybegin(WAITING_DOUBLE_QUOTE_STRING); return FishTypes.ESCAPE_CHARACTERS;
+          case 15: 
+            { yybegin(WAITING_ARGS); return FishTypes.ESCAPE_CHARACTERS;
             } 
             // fall through
           case 32: break;
+          case 16: 
+            { yybegin(WAITING_SINGLE_QUOTE_STRING); return FishTypes.ESCAPE_CHARACTERS;
+            } 
+            // fall through
+          case 33: break;
+          case 17: 
+            { yybegin(WAITING_DOUBLE_QUOTE_STRING); return FishTypes.ESCAPE_CHARACTERS;
+            } 
+            // fall through
+          case 34: break;
           default:
             zzScanError(ZZ_NO_MATCH);
           }

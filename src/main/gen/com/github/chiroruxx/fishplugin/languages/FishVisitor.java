@@ -15,6 +15,10 @@ public class FishVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
+  public void visitRedirects(@NotNull FishRedirects o) {
+    visitPsiElement(o);
+  }
+
   public void visitSentence(@NotNull FishSentence o) {
     visitPsiElement(o);
   }

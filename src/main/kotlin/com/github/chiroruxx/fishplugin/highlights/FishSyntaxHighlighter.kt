@@ -19,7 +19,7 @@ class FishSyntaxHighlighter : SyntaxHighlighterBase() {
             FishTypes.COMMAND -> COMMAND_KEYS
             FishTypes.QUOTE -> STRING_KEYS
             FishTypes.STRING_CHARACTERS -> STRING_KEYS
-            FishTypes.REDIRECT -> REDIRECT_KEYS
+            FishTypes.REDIRECT_SYMBOLE -> REDIRECT_KEYS
             FishTypes.ESCAPE_CHARACTERS -> ESCAPE_SEQUENCE_KEYS
             TokenType.BAD_CHARACTER -> BAD_CHAR_KEYS
             else -> EMPTY_KEYS
