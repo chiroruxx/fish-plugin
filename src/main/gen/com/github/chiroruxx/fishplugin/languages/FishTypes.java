@@ -22,7 +22,6 @@ public interface FishTypes {
   IElementType ESCAPE_CHARACTERS = new FishTokenType("ESCAPE_CHARACTERS");
   IElementType FILE_DESCRIPTOR = new FishTokenType("FILE_DESCRIPTOR");
   IElementType FILE_DESCRIPTOR_SYMBOLE = new FishTokenType("FILE_DESCRIPTOR_SYMBOLE");
-  IElementType OPTIONAL_FD = new FishTokenType("OPTIONAL_FD");
   IElementType QUOTE = new FishTokenType("QUOTE");
   IElementType REDIRECT_FILE = new FishTokenType("REDIRECT_FILE");
   IElementType REDIRECT_SYMBOLE = new FishTokenType("REDIRECT_SYMBOLE");

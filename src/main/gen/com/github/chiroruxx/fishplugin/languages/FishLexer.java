@@ -31,6 +31,7 @@ class FishLexer implements FlexLexer {
   public static final int WAITING_REDIRECT_FILE = 10;
   public static final int WAITING_REDIRECT_FILE_DESCRIPTOR = 12;
   public static final int WAITING_REDIRECTS = 14;
+  public static final int WAITING_REDIRECT_OR_FD = 16;
 
   /**
    * ZZ_LEXSTATE[l] is the state in the DFA for the lexical state l
@@ -39,7 +40,8 @@ class FishLexer implements FlexLexer {
    * l is of the form l = 2*k, k a non negative integer
    */
   private static final int ZZ_LEXSTATE[] = { 
-     0,  0,  1,  1,  2,  2,  3,  3,  4,  4,  5,  5,  6,  6,  7, 7
+     0,  0,  1,  1,  2,  2,  3,  3,  4,  4,  5,  5,  6,  6,  7,  7, 
+     8, 8
   };
 
   /** 
@@ -72,14 +74,15 @@ class FishLexer implements FlexLexer {
   private static final int [] ZZ_ACTION = zzUnpackAction();
 
   private static final String ZZ_ACTION_PACKED_0 =
-    "\10\0\2\1\1\2\1\1\1\3\1\4\1\3\1\4"+
+    "\11\0\2\1\1\2\1\1\1\3\1\4\1\3\1\4"+
     "\2\5\1\3\1\4\1\6\1\7\1\10\2\11\1\12"+
     "\2\13\1\4\1\14\2\15\1\4\2\16\2\17\1\4"+
-    "\1\20\2\21\1\12\2\22\1\0\1\1\1\0\1\5"+
-    "\1\23\1\11\1\0\1\24\1\0\1\25\1\0\1\16";
+    "\1\20\2\21\1\22\2\23\2\24\1\12\1\0\1\1"+
+    "\1\0\1\5\1\25\1\11\1\0\1\26\1\0\1\27"+
+    "\1\0\1\16";
 
   private static int [] zzUnpackAction() {
-    int [] result = new int[56];
+    int [] result = new int[60];
     int offset = 0;
     offset = zzUnpackAction(ZZ_ACTION_PACKED_0, offset, result);
     return result;
@@ -106,14 +109,15 @@ class FishLexer implements FlexLexer {
   private static final String ZZ_ROWMAP_PACKED_0 =
     "\0\0\0\23\0\46\0\71\0\114\0\137\0\162\0\205"+
     "\0\230\0\253\0\276\0\321\0\344\0\367\0\u010a\0\u011d"+
-    "\0\u0130\0\u0143\0\u0156\0\u0169\0\367\0\367\0\367\0\u017c"+
-    "\0\u018f\0\u01a2\0\u01b5\0\u01c8\0\u01db\0\367\0\u01ee\0\u0201"+
-    "\0\u0214\0\u0227\0\u023a\0\276\0\367\0\u024d\0\367\0\276"+
-    "\0\367\0\367\0\367\0\276\0\u011d\0\u0260\0\u0273\0\u0286"+
-    "\0\367\0\367\0\u0299\0\367\0\u02ac\0\367\0\u024d\0\u02bf";
+    "\0\u0130\0\u0143\0\u0156\0\u0169\0\u017c\0\u010a\0\u010a\0\u010a"+
+    "\0\u018f\0\u01a2\0\u01b5\0\u01c8\0\u01db\0\u01ee\0\u010a\0\u0201"+
+    "\0\u0214\0\u0227\0\u023a\0\u024d\0\321\0\u010a\0\u0260\0\u010a"+
+    "\0\321\0\u010a\0\u010a\0\u010a\0\321\0\u010a\0\321\0\u010a"+
+    "\0\u0130\0\u0273\0\u0286\0\u0299\0\u010a\0\u010a\0\u02ac\0\u010a"+
+    "\0\u02bf\0\u010a\0\u0260\0\u02d2";
 
   private static int [] zzUnpackRowMap() {
-    int [] result = new int[56];
+    int [] result = new int[60];
     int offset = 0;
     offset = zzUnpackRowMap(ZZ_ROWMAP_PACKED_0, offset, result);
     return result;
@@ -136,45 +140,47 @@ class FishLexer implements FlexLexer {
   private static final int [] ZZ_TRANS = zzUnpackTrans();
 
   private static final String ZZ_TRANS_PACKED_0 =
-    "\1\11\1\12\1\13\1\12\1\14\1\15\1\16\1\17"+
-    "\1\20\1\11\10\16\1\11\1\21\1\22\1\13\1\22"+
-    "\1\23\1\15\1\16\1\17\1\24\1\21\1\25\1\26"+
-    "\1\16\1\27\1\30\1\16\1\31\1\16\1\32\1\33"+
-    "\1\34\1\13\1\34\1\33\1\34\2\33\1\35\1\33"+
-    "\1\36\10\33\1\37\1\40\1\13\1\40\1\37\1\40"+
-    "\2\37\1\41\2\37\1\36\7\37\1\42\1\43\1\13"+
-    "\1\43\1\42\1\44\1\16\1\45\1\46\1\42\7\16"+
-    "\1\47\2\42\1\43\1\13\1\43\1\42\1\50\1\16"+
-    "\1\51\1\46\1\42\10\16\1\42\1\16\3\13\1\16"+
-    "\1\13\14\16\1\52\1\16\3\13\1\53\1\54\1\16"+
-    "\1\53\5\16\1\27\1\30\1\16\1\31\2\16\2\11"+
-    "\1\0\2\11\3\0\1\55\1\11\10\0\2\11\1\12"+
-    "\1\13\1\12\1\11\1\13\2\0\1\55\1\11\10\0"+
-    "\1\11\1\0\3\13\1\0\1\13\15\0\2\11\1\0"+
-    "\1\11\1\14\1\17\1\0\1\17\1\55\1\11\10\0"+
-    "\1\11\1\0\3\13\1\17\1\15\1\0\1\17\42\0"+
-    "\2\17\1\0\1\17\13\0\3\11\1\56\2\11\14\0"+
-    "\1\11\2\21\1\0\2\21\3\0\1\57\1\21\10\0"+
-    "\2\21\1\22\1\13\1\22\1\21\1\13\2\0\1\57"+
-    "\1\21\10\0\3\21\1\0\1\21\1\23\1\17\1\0"+
-    "\1\17\1\57\1\21\10\0\4\21\1\60\2\21\14\61"+
-    "\1\21\16\0\2\62\22\0\2\62\2\0\15\21\1\0"+
-    "\2\21\1\0\2\21\2\33\1\0\5\33\1\63\1\33"+
-    "\1\0\11\33\1\34\1\13\1\34\1\33\1\34\2\33"+
-    "\1\63\1\33\1\0\20\33\1\64\1\33\1\64\10\33"+
-    "\2\37\1\0\5\37\1\65\2\37\1\0\10\37\1\40"+
-    "\1\13\1\40\1\37\1\40\2\37\1\65\2\37\1\0"+
-    "\11\37\1\66\5\37\1\66\2\37\2\66\6\37\2\42"+
-    "\1\0\2\42\3\0\1\67\1\42\10\0\2\42\1\43"+
-    "\1\13\1\43\1\42\1\13\2\0\1\67\1\42\10\0"+
-    "\4\42\1\70\2\42\14\0\1\42\5\11\3\0\1\55"+
-    "\1\11\10\0\1\11\3\21\1\60\2\21\14\0\6\21"+
-    "\3\0\1\57\1\21\10\0\1\21\10\33\1\0\1\33"+
-    "\1\0\10\33\2\37\1\0\5\37\1\0\2\37\2\0"+
-    "\6\37\5\42\3\0\1\67\1\42\10\0\1\42";
+    "\1\12\1\13\1\14\1\13\1\15\1\16\1\17\1\20"+
+    "\1\21\1\12\10\17\1\12\1\22\1\23\1\14\1\23"+
+    "\1\24\1\16\1\17\1\20\1\25\1\22\1\26\1\27"+
+    "\1\17\1\30\1\31\1\17\1\32\1\17\1\33\1\34"+
+    "\1\35\1\14\1\35\1\34\1\35\2\34\1\36\1\34"+
+    "\1\37\10\34\1\40\1\41\1\14\1\41\1\40\1\41"+
+    "\2\40\1\42\2\40\1\37\7\40\1\43\1\44\1\14"+
+    "\1\44\1\43\1\45\1\17\1\46\1\47\1\43\7\17"+
+    "\1\50\2\43\1\44\1\14\1\44\1\43\1\51\1\17"+
+    "\1\52\1\47\1\43\10\17\1\43\1\17\3\14\1\17"+
+    "\1\14\14\17\1\53\1\17\3\14\1\54\1\55\1\17"+
+    "\1\54\5\17\1\30\1\31\1\17\1\32\3\17\3\14"+
+    "\1\56\1\57\1\17\1\56\5\17\1\30\1\31\1\17"+
+    "\1\32\1\17\1\60\2\12\1\0\2\12\3\0\1\61"+
+    "\1\12\10\0\2\12\1\13\1\14\1\13\1\12\1\14"+
+    "\2\0\1\61\1\12\10\0\1\12\1\0\3\14\1\0"+
+    "\1\14\15\0\2\12\1\0\1\12\1\15\1\20\1\0"+
+    "\1\20\1\61\1\12\10\0\1\12\1\0\3\14\1\20"+
+    "\1\16\1\0\1\20\42\0\2\20\1\0\1\20\13\0"+
+    "\3\12\1\62\2\12\14\0\1\12\2\22\1\0\2\22"+
+    "\3\0\1\63\1\22\10\0\2\22\1\23\1\14\1\23"+
+    "\1\22\1\14\2\0\1\63\1\22\10\0\3\22\1\0"+
+    "\1\22\1\24\1\20\1\0\1\20\1\63\1\22\10\0"+
+    "\4\22\1\64\2\22\14\65\1\22\16\0\2\66\22\0"+
+    "\2\66\2\0\15\22\1\0\2\22\1\0\2\22\2\34"+
+    "\1\0\5\34\1\67\1\34\1\0\11\34\1\35\1\14"+
+    "\1\35\1\34\1\35\2\34\1\67\1\34\1\0\20\34"+
+    "\1\70\1\34\1\70\10\34\2\40\1\0\5\40\1\71"+
+    "\2\40\1\0\10\40\1\41\1\14\1\41\1\40\1\41"+
+    "\2\40\1\71\2\40\1\0\11\40\1\72\5\40\1\72"+
+    "\2\40\2\72\6\40\2\43\1\0\2\43\3\0\1\73"+
+    "\1\43\10\0\2\43\1\44\1\14\1\44\1\43\1\14"+
+    "\2\0\1\73\1\43\10\0\4\43\1\74\2\43\14\0"+
+    "\1\43\5\12\3\0\1\61\1\12\10\0\1\12\3\22"+
+    "\1\64\2\22\14\0\6\22\3\0\1\63\1\22\10\0"+
+    "\1\22\10\34\1\0\1\34\1\0\10\34\2\40\1\0"+
+    "\5\40\1\0\2\40\2\0\6\40\5\43\3\0\1\73"+
+    "\1\43\10\0\1\43";
 
   private static int [] zzUnpackTrans() {
-    int [] result = new int[722];
+    int [] result = new int[741];
     int offset = 0;
     offset = zzUnpackTrans(ZZ_TRANS_PACKED_0, offset, result);
     return result;
@@ -212,13 +218,13 @@ class FishLexer implements FlexLexer {
   private static final int [] ZZ_ATTRIBUTE = zzUnpackAttribute();
 
   private static final String ZZ_ATTRIBUTE_PACKED_0 =
-    "\10\0\5\1\1\11\6\1\3\11\6\1\1\11\6\1"+
-    "\1\11\1\1\1\11\1\1\3\11\1\1\1\0\1\1"+
-    "\1\0\1\1\2\11\1\0\1\11\1\0\1\11\1\0"+
-    "\1\1";
+    "\11\0\5\1\1\11\6\1\3\11\6\1\1\11\6\1"+
+    "\1\11\1\1\1\11\1\1\3\11\1\1\1\11\1\1"+
+    "\1\11\1\0\1\1\1\0\1\1\2\11\1\0\1\11"+
+    "\1\0\1\11\1\0\1\1";
 
   private static int [] zzUnpackAttribute() {
-    int [] result = new int[56];
+    int [] result = new int[60];
     int offset = 0;
     offset = zzUnpackAttribute(ZZ_ATTRIBUTE_PACKED_0, offset, result);
     return result;
@@ -535,107 +541,117 @@ class FishLexer implements FlexLexer {
             { yybegin(YYINITIAL); return FishTypes.COMMAND;
             } 
             // fall through
-          case 22: break;
+          case 24: break;
           case 2: 
             { yybegin(YYINITIAL); return TokenType.WHITE_SPACE;
             } 
             // fall through
-          case 23: break;
+          case 25: break;
           case 3: 
             { yybegin(WAITING_ARGS); return TokenType.WHITE_SPACE;
             } 
             // fall through
-          case 24: break;
+          case 26: break;
           case 4: 
             { return TokenType.BAD_CHARACTER;
             } 
             // fall through
-          case 25: break;
+          case 27: break;
           case 5: 
             { yybegin(WAITING_ARGS); return FishTypes.CHARACTERS;
             } 
             // fall through
-          case 26: break;
+          case 28: break;
           case 6: 
             { yybegin(WAITING_SINGLE_QUOTE_STRING); return FishTypes.QUOTE;
             } 
             // fall through
-          case 27: break;
+          case 29: break;
           case 7: 
             { yybegin(WAITING_DOUBLE_QUOTE_STRING); return FishTypes.QUOTE;
             } 
             // fall through
-          case 28: break;
+          case 30: break;
           case 8: 
             { yybegin(WAITING_REDIRECT_FILE); return FishTypes.REDIRECT_SYMBOLE;
             } 
             // fall through
-          case 29: break;
+          case 31: break;
           case 9: 
             { yybegin(WAITING_REDIRECT_DESTINATION); return FishTypes.REDIRECT_SYMBOLE;
             } 
             // fall through
-          case 30: break;
+          case 32: break;
           case 10: 
             { yybegin(WAITING_REDIRECTS); return FishTypes.FILE_DESCRIPTOR;
             } 
             // fall through
-          case 31: break;
+          case 33: break;
           case 11: 
             { yybegin(WAITING_SINGLE_QUOTE_STRING); return FishTypes.STRING_CHARACTERS;
             } 
             // fall through
-          case 32: break;
+          case 34: break;
           case 12: 
             { yybegin(WAITING_ARGS); return FishTypes.QUOTE;
             } 
             // fall through
-          case 33: break;
+          case 35: break;
           case 13: 
             { yybegin(WAITING_DOUBLE_QUOTE_STRING); return FishTypes.STRING_CHARACTERS;
             } 
             // fall through
-          case 34: break;
+          case 36: break;
           case 14: 
-            { yybegin(WAITING_REDIRECTS); return FishTypes.REDIRECT_FILE;
+            { yybegin(WAITING_REDIRECT_OR_FD); return FishTypes.REDIRECT_FILE;
             } 
             // fall through
-          case 35: break;
+          case 37: break;
           case 15: 
             { yybegin(WAITING_REDIRECT_DESTINATION); return TokenType.WHITE_SPACE;
             } 
             // fall through
-          case 36: break;
+          case 38: break;
           case 16: 
             { yybegin(WAITING_REDIRECT_FILE_DESCRIPTOR); return FishTypes.FILE_DESCRIPTOR_SYMBOLE;
             } 
             // fall through
-          case 37: break;
+          case 39: break;
           case 17: 
             { yybegin(WAITING_REDIRECT_FILE); return TokenType.WHITE_SPACE;
             } 
             // fall through
-          case 38: break;
-          case 18: 
-            { yybegin(WAITING_REDIRECTS); return TokenType.WHITE_SPACE;
-            } 
-            // fall through
-          case 39: break;
-          case 19: 
-            { yybegin(WAITING_ARGS); return FishTypes.ESCAPE_CHARACTERS;
-            } 
-            // fall through
           case 40: break;
-          case 20: 
-            { yybegin(WAITING_SINGLE_QUOTE_STRING); return FishTypes.ESCAPE_CHARACTERS;
+          case 18: 
+            { yybegin(WAITING_REDIRECT_OR_FD); return FishTypes.FILE_DESCRIPTOR;
             } 
             // fall through
           case 41: break;
-          case 21: 
-            { yybegin(WAITING_DOUBLE_QUOTE_STRING); return FishTypes.ESCAPE_CHARACTERS;
+          case 19: 
+            { yybegin(WAITING_REDIRECTS); return TokenType.WHITE_SPACE;
             } 
             // fall through
           case 42: break;
+          case 20: 
+            { yybegin(WAITING_REDIRECT_OR_FD); return TokenType.WHITE_SPACE;
+            } 
+            // fall through
+          case 43: break;
+          case 21: 
+            { yybegin(WAITING_ARGS); return FishTypes.ESCAPE_CHARACTERS;
+            } 
+            // fall through
+          case 44: break;
+          case 22: 
+            { yybegin(WAITING_SINGLE_QUOTE_STRING); return FishTypes.ESCAPE_CHARACTERS;
+            } 
+            // fall through
+          case 45: break;
+          case 23: 
+            { yybegin(WAITING_DOUBLE_QUOTE_STRING); return FishTypes.ESCAPE_CHARACTERS;
+            } 
+            // fall through
+          case 46: break;
           default:
             zzScanError(ZZ_NO_MATCH);
           }

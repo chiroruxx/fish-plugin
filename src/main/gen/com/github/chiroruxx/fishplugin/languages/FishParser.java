@@ -87,9 +87,10 @@ public class FishParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // REDIRECT_FILE|(OPTIONAL_FD? FILE_DESCRIPTOR_SYMBOLE FILE_DESCRIPTOR)
+  // REDIRECT_FILE|(FILE_DESCRIPTOR_SYMBOLE FILE_DESCRIPTOR)
   public static boolean destination(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "destination")) return false;
+    if (!nextTokenIs(b, "<destination>", FILE_DESCRIPTOR_SYMBOLE, REDIRECT_FILE)) return false;
     boolean r;
     Marker m = enter_section_(b, l, _NONE_, DESTINATION, "<destination>");
     r = consumeToken(b, REDIRECT_FILE);
@@ -98,22 +99,14 @@ public class FishParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // OPTIONAL_FD? FILE_DESCRIPTOR_SYMBOLE FILE_DESCRIPTOR
+  // FILE_DESCRIPTOR_SYMBOLE FILE_DESCRIPTOR
   private static boolean destination_1(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "destination_1")) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = destination_1_0(b, l + 1);
-    r = r && consumeTokens(b, 0, FILE_DESCRIPTOR_SYMBOLE, FILE_DESCRIPTOR);
+    r = consumeTokens(b, 0, FILE_DESCRIPTOR_SYMBOLE, FILE_DESCRIPTOR);
     exit_section_(b, m, null, r);
     return r;
-  }
-
-  // OPTIONAL_FD?
-  private static boolean destination_1_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "destination_1_0")) return false;
-    consumeToken(b, OPTIONAL_FD);
-    return true;
   }
 
   /* ********************************************************** */
@@ -140,32 +133,40 @@ public class FishParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // REDIRECT_SYMBOLE destination
+  // FILE_DESCRIPTOR? REDIRECT_SYMBOLE destination
   public static boolean redirect(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "redirect")) return false;
-    if (!nextTokenIs(b, REDIRECT_SYMBOLE)) return false;
+    if (!nextTokenIs(b, "<redirect>", FILE_DESCRIPTOR, REDIRECT_SYMBOLE)) return false;
     boolean r;
-    Marker m = enter_section_(b);
-    r = consumeToken(b, REDIRECT_SYMBOLE);
+    Marker m = enter_section_(b, l, _NONE_, REDIRECT, "<redirect>");
+    r = redirect_0(b, l + 1);
+    r = r && consumeToken(b, REDIRECT_SYMBOLE);
     r = r && destination(b, l + 1);
-    exit_section_(b, m, REDIRECT, r);
+    exit_section_(b, l, m, r, false, null);
     return r;
+  }
+
+  // FILE_DESCRIPTOR?
+  private static boolean redirect_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "redirect_0")) return false;
+    consumeToken(b, FILE_DESCRIPTOR);
+    return true;
   }
 
   /* ********************************************************** */
   // redirect+
   public static boolean redirects(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "redirects")) return false;
-    if (!nextTokenIs(b, REDIRECT_SYMBOLE)) return false;
+    if (!nextTokenIs(b, "<redirects>", FILE_DESCRIPTOR, REDIRECT_SYMBOLE)) return false;
     boolean r;
-    Marker m = enter_section_(b);
+    Marker m = enter_section_(b, l, _NONE_, REDIRECTS, "<redirects>");
     r = redirect(b, l + 1);
     while (r) {
       int c = current_position_(b);
       if (!redirect(b, l + 1)) break;
       if (!empty_element_parsed_guard_(b, "redirects", c)) break;
     }
-    exit_section_(b, m, REDIRECTS, r);
+    exit_section_(b, l, m, r, false, null);
     return r;
   }
 
