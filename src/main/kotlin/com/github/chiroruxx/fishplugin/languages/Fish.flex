@@ -35,7 +35,8 @@ REDIRECT_FILE={CHARACTER}+
 FILE_DESCRIPTOR_SYMBOLE=\&
 FILE_DESCRIPTOR=[012-]
 
-ARG_CHARACTERS={CHARACTER}+
+ARG_FIRST_CHARACTER=[^ 012\-\$\\\*\?\~\%\#\(\)\{\}\[\]\<\>\^\&\;\"\'\n\f\\] | "\\"{CRLF} | "\\"[^abefnrtv\ \$\\\*\?\~\%\#\(\)\{\}\[\]\<\>\^\&\;\"\']
+ARG_CHARACTERS={ARG_FIRST_CHARACTER}{CHARACTER}* | {FILE_DESCRIPTOR}[^\<\>]{CHARACTER}*
 
 %state WAITING_ARGS
 %state WAITING_SINGLE_QUOTE_STRING
@@ -55,6 +56,7 @@ ARG_CHARACTERS={CHARACTER}+
 <WAITING_ARGS> {DOUBLE_QUOTE}                                  { yybegin(WAITING_DOUBLE_QUOTE_STRING); return FishTypes.QUOTE; }
 <WAITING_ARGS> {ARG_CHARACTERS}                                { yybegin(WAITING_ARGS); return FishTypes.CHARACTERS; }
 <WAITING_ARGS> {ESCAPE_SEQUENCE}                               { yybegin(WAITING_ARGS); return FishTypes.ESCAPE_CHARACTERS; }
+<WAITING_ARGS> {FILE_DESCRIPTOR}                               { yybegin(WAITING_REDIRECTS); return FishTypes.FILE_DESCRIPTOR; }
 <WAITING_ARGS> {REDIRECT_INPUT_SYMBOLE}                        { yybegin(WAITING_REDIRECT_FILE); return FishTypes.REDIRECT_SYMBOLE; }
 <WAITING_ARGS> {REDIRECT_OUTPUT_SYMBOLE}                       { yybegin(WAITING_REDIRECT_DESTINATION); return FishTypes.REDIRECT_SYMBOLE; }
 <WAITING_ARGS> {CRLF}                                          { yybegin(YYINITIAL); return TokenType.WHITE_SPACE; }
